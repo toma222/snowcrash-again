@@ -1,6 +1,4 @@
 
-#pragma once
-
 #include <snowcrash/core/EntryPoint.hpp>
 #include <snowcrash/application/Application.hpp>
 #include <RuntimeApplication.hpp>

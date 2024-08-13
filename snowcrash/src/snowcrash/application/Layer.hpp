@@ -20,7 +20,8 @@ public:
     virtual ~Layer();
     Layer();
 
-
+	virtual void Init() = 0;
+	virtual void Update() = 0;
 
     bool GetActive() const { return m_active; }
     void SetActive(bool v) { m_active = v; }
@@ -30,3 +31,4 @@ protected:
 };
 
 }
+

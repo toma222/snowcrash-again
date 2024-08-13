@@ -13,7 +13,7 @@ int main(int argc, char** argv)
 
     Application *app = GetApplication();
 
-    app->Init();
+	app->Init();
     app->Start();
 
     delete app;

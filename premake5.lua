@@ -26,5 +26,5 @@ group "Tools"
 group ""
 
 group "External"
-    
+    include "external/glfw"
 group ""
