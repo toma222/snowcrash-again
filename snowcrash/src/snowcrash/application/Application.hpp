@@ -1,9 +1,11 @@
 
 #pragma once
 
+#include "snowcrash/graphics/Window.hpp"
 #include <snowcrash/core/Core.hpp>
 #include <snowcrash/core/Context.hpp>
 #include <snowcrash/application/Engine.hpp>
+#include <snowcrash/types/ArrayList.hpp>
 
 namespace SC
 {
@@ -19,9 +21,10 @@ public:
 
     void Start();
 
-private:
+public:
     Context *m_context;
     Engine *m_engine;
+	Window *m_window;
 };
 
 }

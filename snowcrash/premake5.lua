@@ -6,5 +6,12 @@ project "snowcrash"
 
     includedirs
     {
-        "src"
+        "src",
+		"%{wks.location}/external/glfw/include"
     }
+
+	links
+	{
+		"glfw"
+	}
+

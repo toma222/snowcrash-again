@@ -1,1 +1,2 @@
 -Isnowcrash/src
+-Iexternal/glfw/include

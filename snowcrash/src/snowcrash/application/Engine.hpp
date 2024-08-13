@@ -13,8 +13,11 @@ public:
     Engine();
     ~Engine();
 
-private:
+	bool GetRunning() const { return m_running; }
+	void SetRunning(bool v) { m_running = v; }
 
+private:
+	bool m_running {true};
 };
 
 }

@@ -6,10 +6,12 @@ project "Runtime"
     includedirs 
     {
         "%{wks.location}/snowcrash/src",
+		"%{wks.location}/external/glfw/include",
         "src"
     }
 
     links
     {
-        "snowcrash"
+        "snowcrash",
+		"glfw"
     }

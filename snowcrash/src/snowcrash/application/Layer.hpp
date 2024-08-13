@@ -2,9 +2,12 @@
 #pragma once
 
 #include <snowcrash/core/Core.hpp>
+// #include <snowcrash/core/Context.hpp>
 
 namespace SC
 {
+
+struct Context;
 
 // Contains layers of the application
 //      The game layer
@@ -21,7 +24,7 @@ public:
     Layer();
 
 	virtual void Init() = 0;
-	virtual void Update() = 0;
+	virtual void Update(Context *context) = 0;
 
     bool GetActive() const { return m_active; }
     void SetActive(bool v) { m_active = v; }

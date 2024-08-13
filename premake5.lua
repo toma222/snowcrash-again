@@ -19,12 +19,17 @@ workspace "Snowcrash Suite"
     targetdir ("build/%{prj.name}/%{cfg.longname}")
     objdir ("build/Obj/%{prj.name}/%{cfg.longname}")
 
+-- this is wacky build system stuff to make the premake for GLFW work	
+outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+
+group "External"
+    include "external/glfw"
+group ""
+
 group "Tools"
     include "snowcrash"
     include "runtime"
     -- include "editor"
 group ""
 
-group "External"
-    include "external/glfw"
-group ""
+
