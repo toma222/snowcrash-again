@@ -1,5 +1,6 @@
 
 #include "Application.hpp"
+#include "snowcrash/application/Event.hpp"
 #include "snowcrash/graphics/Window.hpp"
 
 namespace SC
@@ -20,8 +21,15 @@ Application::~Application()
     delete m_context;
 }
 
+void Application::OnEvent(Event &event)
+{
+	
+}
+
 void Application::Start()
 {
+	Init();
+
 	while(m_engine->GetRunning() == true)
 	{
 		// collect inputs
@@ -30,7 +38,7 @@ void Application::Start()
 		// update layers
 		for (int i = 0; i < m_context->layerStack.GetIndex(); i++)
 		{
-		 	m_context->layerStack[0]->Update(m_context);
+			m_context->layerStack[i]->Update(m_context);
 		}
 
 		// update the game world

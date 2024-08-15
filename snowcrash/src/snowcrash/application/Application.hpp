@@ -21,6 +21,8 @@ public:
 
     void Start();
 
+	void OnEvent(Event &event);
+
 public:
     Context *m_context;
     Engine *m_engine;

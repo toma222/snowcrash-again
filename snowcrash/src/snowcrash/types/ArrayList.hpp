@@ -20,8 +20,8 @@ public:
 
 	ArrayList()
 	{
-		m_data = new T[5];
-		m_capacity = 5;
+		m_data = new T[1];
+		m_capacity = 1;
 	}
 
     T Get(int index)
@@ -32,14 +32,13 @@ public:
 
 	void Add(T item)
 	{
-		m_index++;
-
 		if(m_index > m_capacity)
 		{
 			Resize(m_index+1);
 		}
 
 		m_data[m_index] = item;
+		m_index++;
 	}
 
     void Resize(int size)
@@ -56,7 +55,7 @@ public:
     int GetCapacity() const { return m_capacity; }
 
 private:
-    T *m_data;
+    T *m_data {nullptr};
     int m_index {0}; // points to were the last element is
     int m_capacity {1};
 };
