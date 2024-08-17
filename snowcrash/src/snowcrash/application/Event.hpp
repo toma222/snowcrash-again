@@ -1,22 +1,15 @@
 
 #pragma once
 
+#include "snowcrash/types/Stack.hpp"
+#include "snowcrash/types/String.hpp"
 #include <functional>
+#include <snowcrash/types/UnorderedMap.hpp>
 #include <snowcrash/core/Core.hpp>
 #include <snowcrash/types/ArrayList.hpp>
-#include <snowcrash/types/Pair.hpp>
 
 namespace SC
 {
-
-// not including none
-constexpr int EVENT_CLASS_COUNT = 2;
-enum EventClass : u16
-{
-	None              = SC_BIT(0),
-	Application_Error = SC_BIT(1),
-	Application_Close = SC_BIT(2)
-};
 
 class Event
 {
@@ -24,58 +17,52 @@ public:
 	Event();
 	virtual ~Event();
 
-public:
-	virtual EventClass GetEventClass() { return EventClass::None; }
+	virtual u32 EventDescriptor() const { return 0; }
+	virtual String GetEventName() const { return "Event"; }
 };
 
-// Collects event callback functions and calls them when an event is signaled
-class EventMessenger
+// This is a blank
+
+
+#define SC_EVENT(name) public: \
+	u32 EventDescriptor() const override { return String::StaticHash(#name); } \
+	String GetEventName() const override { return String(#name); } \
+	static u32 GetStaticEventDescriptor() { return String::StaticHash(#name); }
+
+class EventBlank : public Event
+{
+SC_EVENT(EventBlank)
+};
+
+// Holds a list of events
+class EventManager
 {
 public:
-	using EventCallbackFunction = std::function<void (const Event&)>;	
+	// using EventQueue = ArrayList<Event>;
 
 public:
-	EventMessenger();
-	~EventMessenger();
+	EventManager();
+	~EventManager();
 
-	void EmitEvent(Event &event);
-
-	template<class E>
-	void RegisterCallbackFunction(EventCallbackFunction &&function, u16 eventClass)
-	{
-		// find the right array of callback fucntions
-		const Pair<EventClass, ArrayList<EventCallbackFunction>> &arr = m_callbackFunctions[0];
-		}
+	void AddEvent(Event &&event);
+	const Event *GetQueue();
+	const int GetQueueLength();
+	void ClearQueue();
 
 private:
-	ArrayList<
-		Pair<EventClass, ArrayList<EventCallbackFunction>>> m_callbackFunctions;
+	// Holds the event queue
+	// EventQueue m_eventQueue;
+	Stack<Event> m_eventQueue;
 };
 
-
-#define SC_EVENT(ec) public: EventClass GetEventClass() override { return EventClass::ec; } \
-					 static EventClass GetStaticEventClass() { return EventClass::ec; }
-
-// Application Events
-class EventApplicationClose : public Event
+class EventApplicationExit : public Event
 {
-SC_EVENT(Application_Close)
+SC_EVENT(EventApplicationExit)
 
 public:
-	EventApplicationClose() = default;
-	~EventApplicationClose() = default;
+	EventApplicationExit() = default;
+	~EventApplicationExit() = default;
 };
-
-/*
-class EventApplicationError : public Event
-{
-SC_EVENT(Application_Error)
-
-public:
-	EventApplicationError();
-	~EventApplicationError();
-};
-*/
 
 }
 

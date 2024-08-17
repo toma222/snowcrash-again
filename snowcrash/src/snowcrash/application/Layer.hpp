@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <snowcrash/core/Object.hpp>
 #include <snowcrash/core/Core.hpp>
 // #include <snowcrash/core/Context.hpp>
 
@@ -17,14 +18,16 @@ struct Context;
 // Layer holds logic for recieving events
 // Layer has an update function 
 
-class Layer
+class Layer : public Object
 {
+SC_OBJECT(Layer, Object)
+	
 public:
     virtual ~Layer();
-    Layer();
+    explicit Layer(Context *context);
 
 	virtual void Init() = 0;
-	virtual void Update(Context *context) = 0;
+	virtual void Update() = 0;
 
     bool GetActive() const { return m_active; }
     void SetActive(bool v) { m_active = v; }

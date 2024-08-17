@@ -1,4 +1,5 @@
 
+
 #include "Event.hpp"
 #include "snowcrash/types/Pair.hpp"
 
@@ -8,26 +9,28 @@ namespace SC
 Event::Event() = default;
 Event::~Event() = default;
 
-EventMessenger::EventMessenger()
+EventManager::EventManager()
+	: m_eventQueue(32) {} // only 32 events in one frame
+EventManager::~EventManager() = default;
+
+void EventManager::AddEvent(Event &&event)
 {
-	// idk if we have to delete the function pointers or what
+	m_eventQueue.Push(event);
 }
 
-EventMessenger::~EventMessenger()
+const Event *EventManager::GetQueue()
 {
-
+ 	return m_eventQueue.GetStackBase();
 }
 
-void EventMessenger::EmitEvent(Event &event)
+const int EventManager::GetQueueLength()
 {
-	for (int i = 0; i < m_callbackFunctions.GetIndex(); i++)
-	{
-		if(m_callbackFunctions[i].second & event.GetEventClass())
-		{
-			// call the function
-			m_callbackFunctions[i].first(event);
-		}
-	}
+	return m_eventQueue.GetStackElements();
+}
+
+void EventManager::ClearQueue()
+{
+	m_eventQueue.Reset();
 }
 
 }

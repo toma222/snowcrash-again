@@ -1,10 +1,12 @@
 
 #include "GraphicsLayer.hpp"
+#include "snowcrash/application/Layer.hpp"
 
 namespace SC
 {
 
-GraphicsLayer::GraphicsLayer()
+GraphicsLayer::GraphicsLayer(Context *context)
+	: Layer(context)
 {
 
 }
@@ -19,7 +21,7 @@ void GraphicsLayer::Init()
 
 }
 
-void GraphicsLayer::Update(Context *context)
+void GraphicsLayer::Update()
 {
 
 }

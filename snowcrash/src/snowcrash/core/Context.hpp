@@ -24,7 +24,6 @@ public:
 
 public:
 	ArrayList<Layer*> layerStack;
-	EventMessenger eventMessenger;
 };
 
 }

@@ -24,7 +24,7 @@ public:
 		m_capacity = 1;
 	}
 
-    T Get(int index)
+    T Get(int index) const
     {
         if(index >= m_index) return m_data[0];
         return m_data[index];
@@ -52,6 +52,7 @@ public:
 
     T operator[](int i) const { return m_data[i]; }
     int GetIndex() const { return m_index; }
+	int SetIndex(int i) { m_index = i; } // this is a really dangourus function so be carefull <3
     int GetCapacity() const { return m_capacity; }
 
 private:

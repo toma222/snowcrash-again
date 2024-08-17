@@ -7,12 +7,11 @@
 namespace runtime
 {
 
-RuntimeApplication::RuntimeApplication() = default;
 RuntimeApplication::~RuntimeApplication() = default;
 
 void RuntimeApplication::Init()
 {
-	m_context->AddLayer(new snowcrash::GraphicsLayer());
+	m_context->AddLayer(new snowcrash::GraphicsLayer(m_context));
 
     return;
 }
