@@ -35,6 +35,8 @@ public:                                                                     \
         void Execute(const Event &event) { Call(event); }
         virtual u32 GetEventHash() const = 0;
 
+        virtual ~EventHandlerInterface() = default;
+
     private:
         virtual void Call(const Event &event) = 0;
     };
@@ -45,6 +47,7 @@ public:                                                                     \
     public:
         EventHandlerWrapper(const EventHandler<T> &handler)
             : m_eventHandler(handler), m_eventType(T::GetStaticEventHash()) {}
+        ~EventHandlerWrapper() = default;
 
     public:
         u32 GetEventHash() const override { return m_eventType; }

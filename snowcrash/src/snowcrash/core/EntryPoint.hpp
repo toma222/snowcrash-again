@@ -19,7 +19,6 @@ int main(int argc, char **argv)
     Context *context = new Context();
     Application *app = GetApplication(context);
 
-    app->Init();
     app->Start();
 
     delete app;

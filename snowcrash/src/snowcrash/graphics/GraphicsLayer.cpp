@@ -12,6 +12,7 @@ namespace SC
 
 	GraphicsLayer::~GraphicsLayer()
 	{
+		SC_TRACE("Clean graphics layer");
 	}
 
 	void GraphicsLayer::Init()

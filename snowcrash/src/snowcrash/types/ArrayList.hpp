@@ -62,6 +62,8 @@ namespace SC
         void SetIndex(int i) { m_index = i; } // this is a really dangourus function so be carefull <3
         int GetCapacity() const { return m_capacity; }
 
+        T *GetArray() { return m_data; }
+
     private:
         void MoveRange(u32 dest, u32 source, u32 count)
         {

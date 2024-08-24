@@ -8,7 +8,19 @@ namespace SC
 
     EventManager::EventManager()
         : m_eventQueue(16) {} // can hold 16 events per frame
-    EventManager::~EventManager() = default;
+    EventManager::~EventManager()
+    {
+        SC_TRACE("Cleaning Event manager (not really because it keeps crashing lol)");
+        // Clean out the unordered map
+        ArrayList<Pair<ArrayList<EventHandlerInterface *>, u32>> &map = m_eventHashInterfaceTable.GetArray();
+        for (int i = 0; i < map.GetIndex(); i++)
+        {
+            for (int j = 0; j < map.Get(i).first.GetIndex(); j++)
+            {
+                delete map.Get(i).first.GetArray()[j];
+            }
+        }
+    }
 
     void EventManager::Subscribe(EventHandlerInterface *handler)
     {

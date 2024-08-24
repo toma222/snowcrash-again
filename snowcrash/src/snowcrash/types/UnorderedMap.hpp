@@ -48,6 +48,8 @@ namespace SC
 
 		T &operator[](T hash) { return Get(hash); }
 
+		ArrayList<Pair<T, Hash>> &GetArray() { return m_array; }
+
 	private:
 		ArrayList<Pair<T, Hash>> m_array;
 	};
