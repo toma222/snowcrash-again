@@ -7,16 +7,16 @@
 namespace runtime
 {
 
-class RuntimeApplication : public snowcrash::Application
-{
-SC_OBJECT(RuntimeApplication, Application)
+    class RuntimeApplication : public snowcrash::Application
+    {
+        SC_OBJECT(RuntimeApplication, Application)
 
-public:
-	// just use the default constructor
-	using snowcrash::Application::Application;
-    ~RuntimeApplication();
+    public:
+        // just use the default constructor
+        explicit RuntimeApplication(SC::Context *context);
+        ~RuntimeApplication();
 
-    void Init() override;
-};
+        void Init() override;
+    };
 
 }

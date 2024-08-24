@@ -12,18 +12,20 @@
 extern snowcrash::Application *GetApplication(snowcrash::Context *context);
 
 // no command line args yet
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     using namespace snowcrash;
 
-	Context *context = new Context();
+    Context *context = new Context();
     Application *app = GetApplication(context);
 
-	app->Init();
+    app->Init();
     app->Start();
 
     delete app;
-	delete context;
+    delete context;
+
+    SC_TRACE("Exiting program");
 
     return 0;
 }

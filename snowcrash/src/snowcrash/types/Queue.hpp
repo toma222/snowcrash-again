@@ -8,49 +8,53 @@
 namespace SC
 {
 
-template<typename T>
-class Queue
-{
-public:
-    Queue(int queueSize)
-        : m_capacity(queueSize)
+    template <typename T>
+    class Queue
     {
-        m_bottom = new T[queueSize];
-    }
+    public:
+        Queue(int queueSize)
+            : m_capacity(queueSize)
+        {
+            m_bottom = new T[queueSize];
+        }
 
-    ~Queue()
-    {
-        delete[] m_bottom;
-    }
+        ~Queue()
+        {
+            delete[] m_bottom;
+        }
 
-    bool Add(T element)
-    {
-        if(m_elements == m_capacity) return false;
-        m_bottom[m_elements] = element;
-        m_elements++;
+        bool Add(T element)
+        {
+            if (m_elements == m_capacity)
+                return false;
+            m_bottom[m_elements] = element;
+            m_elements++;
 
-        return true;
-    }
+            return true;
+        }
 
-    bool Next()
-    { 
-        if(m_elements == 0) return false;
-        ::SC::Write("TRACE", __FILE__, __LINE__, "%i", m_elements);
-        m_elements--;
-        return true;
-    }
+        bool Next()
+        {
+            if (m_elements == 0)
+                return false;
 
-    T TopElement() { return m_bottom[m_elements]; }
+            m_elements--;
+            return true;
+        }
 
-    int GetElementsInQueue() const { return m_elements; }
-    const int GetCapacity() const { return m_capacity; }
-    T *GetQueue() const { return m_bottom; }
+        bool HasNext() { return m_elements != 0; }
 
-private:
-    T *m_bottom;
+        T TopElement() { return m_bottom[m_elements]; }
 
-    int m_elements {0}; // the amount of elements left in the queue
-    const int m_capacity;
-};
+        int GetElementsInQueue() const { return m_elements; }
+        const int GetCapacity() const { return m_capacity; }
+        T *GetQueue() const { return m_bottom; }
+
+    private:
+        T *m_bottom;
+
+        int m_elements{0}; // the amount of elements left in the queue
+        const int m_capacity;
+    };
 
 }

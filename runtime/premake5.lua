@@ -13,5 +13,6 @@ project "Runtime"
     links
     {
         "snowcrash",
-		"glfw"
+		"glfw",
+        "mingw32"
     }

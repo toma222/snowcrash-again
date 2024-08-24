@@ -12,66 +12,67 @@
 namespace SC
 {
 
-class Event
-{
-public:
-    Event() = default;
-    virtual ~Event() = default;
+    class Event
+    {
+    public:
+        Event() = default;
+        virtual ~Event() = default;
 
-    virtual u32 GetEventHash() const = 0;
-};
+        virtual u32 GetEventHash() const = 0;
+    };
 
-#define SC_EVENT(name) public: \
+#define SC_EVENT(name)                                                      \
+public:                                                                     \
     u32 GetEventHash() const override { return String::StaticHash(#name); } \
     static u32 GetStaticEventHash() { return String::StaticHash(#name); }
 
-template<typename T>
-using EventHandler = std::function<void(const T &event)>;
+    template <typename T>
+    using EventHandler = std::function<void(const T &event)>;
 
-class EventHandlerInterface
-{
-public:
-    void Execute(const Event &event) { Call(event); }
-    virtual u32 GetEventHash() const = 0;
-
-private:
-    virtual void Call(const Event &event) = 0;
-};
-
-template<typename T>
-class EventHandlerWrapper : public EventHandlerInterface
-{
-public:
-    EventHandlerWrapper(const EventHandler<T> &handler)
-        : m_eventHandler(handler), m_eventType(T::GetStaticEventHash()) {}
-
-public:
-    u32 GetEventHash() const override { return m_eventType; }
-
-    void Call(const Event &event) override
+    class EventHandlerInterface
     {
-        if(event.GetEventHash() == GetEventHash()) 
-            m_eventHandler(static_cast<const T&>(event));
-    }
+    public:
+        void Execute(const Event &event) { Call(event); }
+        virtual u32 GetEventHash() const = 0;
 
-private:
-    EventHandler<T> m_eventHandler;
-    const u32 m_eventType;
-};
+    private:
+        virtual void Call(const Event &event) = 0;
+    };
 
-class EventManager
-{
-public:
-    EventManager();
-    ~EventManager();
+    template <typename T>
+    class EventHandlerWrapper : public EventHandlerInterface
+    {
+    public:
+        EventHandlerWrapper(const EventHandler<T> &handler)
+            : m_eventHandler(handler), m_eventType(T::GetStaticEventHash()) {}
 
-    void Subscribe(EventHandlerInterface *handler);
-    void QueueEvent(Event *event);
-    void DispatchEvents();
+    public:
+        u32 GetEventHash() const override { return m_eventType; }
 
-private:
-   UnorderedMap<ArrayList<EventHandlerInterface*>, u32> m_eventHashInterfaceTable;
-   Queue<Event*> m_eventQueue;
-};
+        void Call(const Event &event) override
+        {
+            if (event.GetEventHash() == GetEventHash())
+                m_eventHandler(static_cast<const T &>(event));
+        }
+
+    private:
+        EventHandler<T> m_eventHandler;
+        const u32 m_eventType;
+    };
+
+    class EventManager
+    {
+    public:
+        EventManager();
+        ~EventManager();
+
+        void Subscribe(EventHandlerInterface *handler);
+        void QueueEvent(Event *event);
+        void DispatchEvents();
+
+    private:
+        UnorderedMap<ArrayList<EventHandlerInterface *>, u32> m_eventHashInterfaceTable;
+        Queue<Event *> m_eventQueue;
+    };
 
 }

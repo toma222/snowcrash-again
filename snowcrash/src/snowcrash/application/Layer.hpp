@@ -8,33 +8,32 @@
 namespace SC
 {
 
-struct Context;
+    struct Context;
 
-// Contains layers of the application
-//      The game layer
-//      The editor layer
-//      The audio layer
-//
-// Layer holds logic for recieving events
-// Layer has an update function 
+    // Contains layers of the application
+    //      The game layer
+    //      The editor layer
+    //      The audio layer
+    //
+    // Layer holds logic for recieving events
+    // Layer has an update function
 
-class Layer : public Object
-{
-SC_OBJECT(Layer, Object)
-	
-public:
-    virtual ~Layer();
-    explicit Layer(Context *context);
+    class Layer : public Object
+    {
+        SC_OBJECT(Layer, Object)
 
-	virtual void Init() = 0;
-	virtual void Update() = 0;
+    public:
+        virtual ~Layer();
+        explicit Layer(Context *context);
 
-    bool GetActive() const { return m_active; }
-    void SetActive(bool v) { m_active = v; }
+        virtual void Init() = 0;
+        virtual void Update() = 0;
 
-protected:
-    bool m_active;
-};
+        bool GetActive() const { return m_active; }
+        void SetActive(bool v) { m_active = v; }
+
+    protected:
+        bool m_active;
+    };
 
 }
-

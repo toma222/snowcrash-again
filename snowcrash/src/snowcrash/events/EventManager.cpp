@@ -6,49 +6,45 @@
 namespace SC
 {
 
-EventManager::EventManager()
-    : m_eventQueue(16) {} // can hold 16 events per frame
-EventManager::~EventManager() = default;
+    EventManager::EventManager()
+        : m_eventQueue(16) {} // can hold 16 events per frame
+    EventManager::~EventManager() = default;
 
-void EventManager::Subscribe(EventHandlerInterface *handler)
-{
-    SC_TRACE("Subscribe Event");
-
-    if(m_eventHashInterfaceTable.HasDuplicate(handler->GetEventHash()))
+    void EventManager::Subscribe(EventHandlerInterface *handler)
     {
-        auto interfaceArray = m_eventHashInterfaceTable.Get(handler->GetEventHash());
-        interfaceArray.Add(handler);
-    }else{
-        SC_TRACE("Adding new event interface array");
-
-        m_eventHashInterfaceTable.Enter(
-            ArrayList<EventHandlerInterface*>(), 
-            handler->GetEventHash()
-        );
-
-        m_eventHashInterfaceTable.Get(handler->GetEventHash()).Add(handler);
-    }
-}
-
-void EventManager::QueueEvent(Event *event)
-{
-    m_eventQueue.Add(event);
-}
-
-void EventManager::DispatchEvents()
-{
-    while(m_eventQueue.Next())
-    {
-        SC_TRACE("next event");
-        Event *e = m_eventQueue.TopElement();
-        auto handlerArray = m_eventHashInterfaceTable.Get(e->GetEventHash());
-
-        for(int i = 0; i < handlerArray.GetIndex(); i++)
+        if (m_eventHashInterfaceTable.HasDuplicate(handler->GetEventHash()))
         {
-            SC_TRACE("Exicute");
-            handlerArray.Get(i)->Execute(*e);
+            auto interfaceArray = m_eventHashInterfaceTable.Get(handler->GetEventHash());
+            interfaceArray.Add(handler);
+        }
+        else
+        {
+            m_eventHashInterfaceTable.Enter(
+                ArrayList<EventHandlerInterface *>(),
+                handler->GetEventHash());
+
+            m_eventHashInterfaceTable.Get(handler->GetEventHash()).Add(handler);
         }
     }
-}
+
+    void EventManager::QueueEvent(Event *event)
+    {
+        m_eventQueue.Add(event);
+    }
+
+    void EventManager::DispatchEvents()
+    {
+        while (m_eventQueue.HasNext())
+        {
+            m_eventQueue.Next();
+            Event *e = m_eventQueue.TopElement();
+            auto handlerArray = m_eventHashInterfaceTable.Get(e->GetEventHash());
+
+            for (int i = 0; i < handlerArray.GetIndex(); i++)
+            {
+                handlerArray.Get(i)->Execute(*e);
+            }
+        }
+    }
 
 }

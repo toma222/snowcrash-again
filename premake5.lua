@@ -1,4 +1,3 @@
-
 workspace "Snowcrash Suite"
     language "C++"
     architecture "x86_64"
@@ -15,6 +14,12 @@ workspace "Snowcrash Suite"
 		optimize "On"
 
     filter {}
+
+    links {
+        "mingw32",
+        "opengl32",
+        "gdi32"
+    }
 
     targetdir ("build/%{prj.name}/%{cfg.longname}")
     objdir ("build/Obj/%{prj.name}/%{cfg.longname}")

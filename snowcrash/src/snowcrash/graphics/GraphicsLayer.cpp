@@ -5,26 +5,22 @@
 namespace SC
 {
 
-GraphicsLayer::GraphicsLayer(Context *context)
-	: Layer(context)
-{
+	GraphicsLayer::GraphicsLayer(Context *context)
+		: Layer(context)
+	{
+	}
+
+	GraphicsLayer::~GraphicsLayer()
+	{
+	}
+
+	void GraphicsLayer::Init()
+	{
+	}
+
+	void GraphicsLayer::Update()
+	{
+		// m_context->QueueEvent<EventApplicationError>(new EventApplicationError("graphics layer wanted to quit lol"));
+	}
 
 }
-
-GraphicsLayer::~GraphicsLayer()
-{
-
-}
-
-void GraphicsLayer::Init()
-{
-
-}
-
-void GraphicsLayer::Update()
-{
-
-}
-
-}
-

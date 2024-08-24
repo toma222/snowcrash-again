@@ -11,25 +11,25 @@
 namespace SC
 {
 
-// Handles the runtime and manages the engine
-class Application : public Object
-{
-SC_OBJECT(Application, Object)
+    // Handles the runtime and manages the engine
+    class Application : public Object
+    {
+        SC_OBJECT(Application, Object)
 
-public:
-    Application(Context *context);
-    virtual ~Application();
+    public:
+        explicit Application(Context *context);
+        virtual ~Application();
 
-    virtual void Init() = 0;
+        virtual void Init() = 0;
 
-    void Start();
+        void Start();
 
-	// void OnEvent(Event &event);
+        // void OnEvent(Event &event);
 
-public:
-    // Context *m_context;
-    Engine *m_engine;
-	Window *m_window;
-};
+    public:
+        // Context *m_context;
+        Engine *m_engine;
+        Window *m_window;
+    };
 
 }

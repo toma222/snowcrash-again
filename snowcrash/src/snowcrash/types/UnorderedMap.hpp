@@ -8,43 +8,48 @@
 namespace SC
 {
 
-template<typename T, typename Hash>
-class UnorderedMap
-{
-public:
-	UnorderedMap() = default;
-	~UnorderedMap() = default;
-	UnorderedMap(u32 size)
-		: m_array(size) {}
-
-	T Get(Hash hash) const
+	template <typename T, typename Hash>
+	class UnorderedMap
 	{
-		for(int i = 0; i < m_array.GetIndex(); i++)
-			if(m_array.Get(i).second == hash)
-				return m_array[i].first;
+	public:
+		UnorderedMap() = default;
+		~UnorderedMap() = default;
+		UnorderedMap(u32 size)
+			: m_array(size) {}
 
-		return m_array[0].first;
-	}
+		T &Get(Hash hash) const
+		{
+			for (int i = 0; i < m_array.GetIndex(); i++)
+			{
+				if (m_array.Get(i).second == hash)
+				{
+					return m_array[i].first;
+				}
+			}
 
-	void Enter(T value, Hash hash)
-	{
-		m_array.Add(Pair<T, Hash>{value, hash});
-	}
+			return m_array[0].first;
+		}
 
-	bool HasDuplicate(Hash hash) const
-	{
-		for(int i = 0; i < m_array.GetIndex(); i++)
-			if(m_array.Get(i).second == hash)
-				return true;
+		void Enter(T value, Hash hash)
+		{
+			m_array.Add(Pair<T, Hash>{value, hash});
+		}
 
-		return false;
-	}
+		bool HasDuplicate(Hash hash) const
+		{
+			for (int i = 0; i < m_array.GetIndex(); i++)
+				if (m_array.Get(i).second == hash)
+					return true;
 
-	int GetSize() const { return m_array.GetIndex(); }
+			return false;
+		}
 
-private:
-	ArrayList<Pair<T, Hash>> m_array;
-};
+		int GetSize() const { return m_array.GetIndex(); }
+
+		T &operator[](T hash) { return Get(hash); }
+
+	private:
+		ArrayList<Pair<T, Hash>> m_array;
+	};
 
 }
-

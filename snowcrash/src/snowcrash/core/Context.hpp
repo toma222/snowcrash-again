@@ -11,38 +11,38 @@
 namespace SC
 {
 
-// Contains all the global variables and state
-struct Context
-{
-public:
-	Context();
-	~Context();
-
-	template<typename T>
-	void AddLayer(T *layer)
+	// Contains all the global variables and state
+	struct Context
 	{
-		layerStack.Add((Layer*)layer);
-	}
+	public:
+		Context();
+		~Context();
 
-	template<typename T>
-	inline void SubscribeEvent(const EventHandler<T> &callback)
-	{
-		EventHandlerWrapper<T> *wrapper = new EventHandlerWrapper<T>(callback);
-		EventHandlerInterface *interface = (EventHandlerInterface*)wrapper;
-		eventManager.Subscribe(interface);
-	}
+		template <typename T>
+		void AddLayer(T *layer)
+		{
+			layerStack.Add((Layer *)layer);
+		}
 
-	template<typename T>
-	inline void QueueEvent(T *event)
-	{
-		eventManager.QueueEvent(static_cast<Event*>(event));
-	}
+		template <typename T>
+		inline void SubscribeEvent(const EventHandler<T> &callback)
+		{
+			EventHandlerWrapper<T> *wrapper = new EventHandlerWrapper<T>(callback);
+			EventHandlerInterface *interface = (EventHandlerInterface *)wrapper;
+			eventManager.Subscribe(interface);
+		}
 
-	inline void DispatchEvents() { eventManager.DispatchEvents(); }
+		template <typename T>
+		inline void QueueEvent(T *event)
+		{
+			eventManager.QueueEvent(static_cast<Event *>(event));
+		}
 
-public:
-	ArrayList<Layer*> layerStack;
-	EventManager eventManager;
-};
+		inline void DispatchEvents() { eventManager.DispatchEvents(); }
+
+	public:
+		ArrayList<Layer *> layerStack;
+		EventManager eventManager;
+	};
 
 }

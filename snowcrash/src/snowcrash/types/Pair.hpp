@@ -6,12 +6,11 @@
 namespace SC
 {
 
-template<typename T, typename U>
-struct Pair
-{
-	T first;
-	U second;
-};
+	template <typename T, typename U>
+	struct Pair
+	{
+		T first;
+		U second;
+	};
 
 }
-
