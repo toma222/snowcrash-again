@@ -21,9 +21,17 @@ public:
 	u32 Hash() const;
 	static const u32 StaticHash(const char *str);
 
+	// substring, cat, find char, find string
+	String Substring(int len) const;
+	String Substring(int index, int len) const;
+
+	int FindIndexOfChar(char c) const;
+	char GetCharAtIndex(int i) const;
+
+	int FindIndexOfString(const char *string) const;
+
 private:
 	void Resize(int size); // resizes the buffer; also sets the m_size variable
-	
 
 public:
 	void operator=(const char *string)
@@ -31,6 +39,11 @@ public:
 		int strSize = strlen(string);
 		Resize(strSize+1); // null terminator
 		m_buffer[strSize+1] = '\0';
+	}
+
+	void operator=(const String &string)
+	{
+		*this = string.c_str();
 	}
 
 private:

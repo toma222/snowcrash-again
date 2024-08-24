@@ -33,6 +33,37 @@ void String::Resize(int size)
 	m_size = size;
 }
 
+String String::Substring(int len) const
+{
+	char s[len];
+	memcpy(&s, m_buffer, len);
+	s[len] = '\0';
+	return String(s);
+}
+
+String String::Substring(int index, int len) const
+{
+	char s[len];
+	memcpy(&s, m_buffer+index, len);
+	s[len] = '\0';
+	return String(s);
+}
+
+int String::FindIndexOfChar(char c) const
+{
+	return (int)(strchr(m_buffer, c) - m_buffer);
+}
+
+char String::GetCharAtIndex(int i) const
+{
+	return m_buffer[i];
+}
+
+int String::FindIndexOfString(const char *str) const
+{
+	return (int)(strstr(m_buffer, str) - m_buffer);
+}
+
 u32 String::Hash() const
 {
 	constexpr int prime = 31;

@@ -31,6 +31,8 @@ public:
 	void PollEvents();
 	void SwapBuffers();
 
+	bool WindowShouldClose();
+
 	// GLFWwindow *GetHandle();
 
 private:

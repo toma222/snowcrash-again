@@ -9,8 +9,5 @@ Object::Object(Context *context)
 
 Object::~Object() = default;
 
-// we dont do anything
-void Object::OnEvent(Event&) {}
-
 }
 

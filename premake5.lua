@@ -29,6 +29,7 @@ group ""
 group "Tools"
     include "snowcrash"
     include "runtime"
+    include "testing"
     -- include "editor"
 group ""
 

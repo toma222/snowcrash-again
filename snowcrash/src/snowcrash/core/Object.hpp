@@ -1,8 +1,7 @@
 
 #pragma once
 
-#include "snowcrash/application/Event.hpp"
-#include "snowcrash/types/String.hpp"
+#include <snowcrash/types/String.hpp>
 #include <snowcrash/core/Core.hpp>
 
 namespace SC
@@ -31,7 +30,7 @@ public:
 	virtual u32 GetHash() const = 0;
 
 public:
-	virtual void OnEvent(Event &event);
+	// virtual void OnEvent(Event &event);
 
 public:
 	template<typename T>

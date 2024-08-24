@@ -41,5 +41,10 @@ void Window::SwapBuffers()
 	glfwSwapBuffers(m_window);
 }
 
+bool Window::WindowShouldClose()
+{
+	return glfwWindowShouldClose(m_window);
+}
+
 }
 

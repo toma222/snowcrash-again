@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include "snowcrash/application/Event.hpp"
 #include "snowcrash/core/Context.hpp"
 #include "snowcrash/types/String.hpp"
 #include <cstdlib>
@@ -19,7 +18,6 @@ int main(int argc, char** argv)
 
 	Context *context = new Context();
     Application *app = GetApplication(context);
-
 
 	app->Init();
     app->Start();

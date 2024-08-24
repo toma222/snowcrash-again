@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "random": "cpp"
+    },
+    "cmake.ignoreCMakeListsMissing": true,
+    "cmake.configureOnOpen": true
+}

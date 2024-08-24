@@ -1,5 +1,5 @@
 
-project "Runtime"
+project "Testing"
     kind "ConsoleApp"
     files "src/**"
 

@@ -1,4 +1,6 @@
 
+#pragma once
+
 #include <snowcrash/core/Core.hpp>
 #include <snowcrash/types/Pair.hpp>
 #include <snowcrash/types/ArrayList.hpp>

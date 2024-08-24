@@ -9,7 +9,7 @@ namespace SC
 {
 
 template<typename ...Args>
-constexpr void Write(const char *level, const char *file, int line, Args &&...args)
+void Write(const char *level, const char *file, int line, Args &&...args)
 {
             // File Time Urgency
     printf("[%s][%s:%i] ", level, file, line);

@@ -2,15 +2,18 @@
 #pragma once
 
 #include <snowcrash/core/Core.hpp>
+#include <snowcrash/core/Object.hpp>
 
 namespace SC
 {
 
 // Holds the logic to run the systems of the game engine
-class Engine final
+class Engine : public Object
 {
+SC_OBJECT(Engine, Object)
+
 public:
-    Engine();
+    Engine(Context *context);
     ~Engine();
 
 	bool GetRunning() const { return m_running; }

@@ -1,6 +1,5 @@
 
 #include "Application.hpp"
-#include "snowcrash/application/Event.hpp"
 #include "snowcrash/core/Object.hpp"
 #include "snowcrash/graphics/Window.hpp"
 
@@ -10,7 +9,7 @@ namespace SC
 Application::Application(Context *context)
 	: Object(context)
 {
-    m_engine = new Engine();
+    m_engine = new Engine(context);
 
 	m_window = new Window();
 }
@@ -29,6 +28,10 @@ void Application::Start()
 	{
 		// collect inputs
 		m_window->PollEvents();
+		if(m_window->WindowShouldClose()) m_context->QueueEvent<EventApplicationExit>(new EventApplicationExit());
+
+		// respond to the inputs
+		m_context->DispatchEvents();
 
 		// update layers
 		for (int i = 0; i < m_context->layerStack.GetIndex(); i++)

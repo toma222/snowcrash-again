@@ -6,14 +6,14 @@
 namespace SC
 {
 
-enum class TimeMesurment
+enum class TimeMesurment : int
 {
     Hour,
     Minute,
     Second,
     Millisecond,
     Microsecond,
-    Nanosecond
+    Nanosecond 
 };
 
 struct TimeStamp
