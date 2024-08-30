@@ -18,7 +18,7 @@ namespace SC
 
         if (buffer.st_mode == S_IFDIR)
         {
-            m_path = false;
+            m_isPath = false;
         }
         else
         {

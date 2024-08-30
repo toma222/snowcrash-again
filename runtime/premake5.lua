@@ -7,6 +7,7 @@ project "Runtime"
     {
         "%{wks.location}/snowcrash/src",
         "%{wks.location}/external",
+        "%{wks.location}/external/glm",
 		"%{wks.location}/external/glfw/include",
         "%{wks.location}/external/VulkanMemoryAllocator/include",
         "src",

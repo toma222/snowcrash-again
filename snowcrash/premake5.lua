@@ -9,6 +9,7 @@ project "snowcrash"
         "src",
         "%{wks.location}/external",
 		"%{wks.location}/external/glfw/include",
+        "%{wks.location}/external/glm",
         "%{wks.location}/external/VulkanMemoryAllocator/include",
         "%{IncludeDir.VulkanSDK}"
     }
