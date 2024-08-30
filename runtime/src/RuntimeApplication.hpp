@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "snowcrash/core/Object.hpp"
+#include <snowcrash/core/Object.hpp>
 #include <snowcrash/application/Application.hpp>
 
 namespace runtime

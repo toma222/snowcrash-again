@@ -1,3 +1,6 @@
+
+include "dependencies.lua"
+
 workspace "Snowcrash Suite"
     language "C++"
     architecture "x86_64"

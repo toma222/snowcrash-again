@@ -69,6 +69,14 @@ namespace SC
 		return (int)(strstr(m_buffer, str) - m_buffer);
 	}
 
+	String String::AppendString(const String &s) const
+	{
+		char str[s.m_size + m_size];
+		strcpy(str, m_buffer);
+		strcat(str, s.c_str());
+		return String(str);
+	}
+
 	u32 String::Hash() const
 	{
 		constexpr int prime = 31;

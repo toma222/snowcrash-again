@@ -13,7 +13,7 @@ namespace runtime
 
     void RuntimeApplication::Init()
     {
-        m_context->AddLayer(new snowcrash::GraphicsLayer(m_context));
+        m_context->AddLayer(new snowcrash::GraphicsLayer(m_context, m_window));
 
         return;
     }

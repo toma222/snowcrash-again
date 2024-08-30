@@ -7,11 +7,15 @@ project "snowcrash"
     includedirs
     {
         "src",
-		"%{wks.location}/external/glfw/include"
+        "%{wks.location}/external",
+		"%{wks.location}/external/glfw/include",
+        "%{wks.location}/external/VulkanMemoryAllocator/include",
+        "%{IncludeDir.VulkanSDK}"
     }
 
 	links
 	{
-		"glfw"
+		"glfw",
+        "%{Library.Vulkan}"
 	}
 

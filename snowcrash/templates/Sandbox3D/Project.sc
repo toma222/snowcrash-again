@@ -1,0 +1,5 @@
+
+ProjectName
+SystemPath
+AssetsPath
+SystemsPath

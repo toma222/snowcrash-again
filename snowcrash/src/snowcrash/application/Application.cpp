@@ -23,6 +23,11 @@ namespace SC
 	{
 		Init();
 
+		for (int i = 0; i < m_context->layerStack.GetIndex(); i++)
+		{
+			m_context->layerStack[i]->Init();
+		}
+
 		// Respond to any events that have been raised
 		m_context->DispatchEvents();
 

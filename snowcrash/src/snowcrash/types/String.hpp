@@ -32,6 +32,8 @@ namespace SC
 
 		int FindIndexOfString(const char *string) const;
 
+		String AppendString(const String &s) const;
+
 	private:
 		void Resize(int size); // resizes the buffer; also sets the m_size variable
 

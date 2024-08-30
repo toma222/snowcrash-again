@@ -7,41 +7,42 @@
 namespace SC
 {
 
-// holds some info that is nice to have about the window
-struct Monitor
-{
-	int pixelsX;
-	int pixelsY;
-	int redBits;
-	int blueBits;
-	int greenBits;
-	int refreshRate;
-};
+	// holds some info that is nice to have about the window
+	struct Monitor
+	{
+		int pixelsX;
+		int pixelsY;
+		int redBits;
+		int blueBits;
+		int greenBits;
+		int refreshRate;
+	};
 
-// manages the glfw window context
-class Window final
-{
-public:
-	Window();
-	~Window();
+	// manages the glfw window context
+	class Window final
+	{
+	public:
+		Window();
+		~Window();
 
-	int GetWidth() const { return m_width; }
-	int GetHeight() const { return m_height; }
+		int GetWidth() const { return m_width; }
+		int GetHeight() const { return m_height; }
 
-	void PollEvents();
-	void SwapBuffers();
+		void PollEvents();
+		void SwapBuffers();
 
-	bool WindowShouldClose();
+		bool WindowShouldClose();
 
-	// GLFWwindow *GetHandle();
+		GLFWwindow *GetHandle() const { return m_window; }
 
-private:
-	int m_width  {500};
-	int m_height {500};
+		// GLFWwindow *GetHandle();
 
-	GLFWwindow *m_window {nullptr};
-	Monitor m_monitor;
-};
+	private:
+		int m_width{500};
+		int m_height{500};
+
+		GLFWwindow *m_window{nullptr};
+		Monitor m_monitor;
+	};
 
 }
-

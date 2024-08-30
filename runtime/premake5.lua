@@ -6,13 +6,17 @@ project "Runtime"
     includedirs 
     {
         "%{wks.location}/snowcrash/src",
+        "%{wks.location}/external",
 		"%{wks.location}/external/glfw/include",
-        "src"
+        "%{wks.location}/external/VulkanMemoryAllocator/include",
+        "src",
+        "%{IncludeDir.VulkanSDK}"
     }
 
     links
     {
         "snowcrash",
 		"glfw",
-        "mingw32"
+        "mingw32",
+        "%{Library.Vulkan}"
     }
