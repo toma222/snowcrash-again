@@ -1,18 +1,14 @@
 
 #include "ResourceArray.hpp"
 
+#include <snowcrash/resource/Resource.hpp>
+
 namespace SC
 {
     ResourceArray::ResourceArray() = default;
 
     ResourceArray::~ResourceArray()
     {
-        SC_TRACE("Deleting resource load queue");
-        for (int i = 0; i < m_resourceLoadQueue.GetIndex(); i++)
-        {
-            delete m_resourceLoadQueue[i].first;
-        }
-
         SC_TRACE("Deleting loaded resources");
         ArrayList<Resource *> resources;
         m_hashToResource.ToArray(resources);
@@ -23,11 +19,12 @@ namespace SC
         }
     }
 
+    /*
     void ResourceArray::QueueResourceForLoad(ResourceLoader *loader, String path)
     {
-        m_resourceLoadQueue.Add(
-            Pair<ResourceLoader *, String>{loader, path});
+        m_resourceLoadQueue.Add(Pair<ResourceLoader *, String>(loader, path));
     }
+    */
 
     void ResourceArray::LoadResources()
     {
@@ -47,9 +44,10 @@ namespace SC
             {
                 // different OS's will be wacky about path separators
                 int sl = entry.second.LastIndexOfChar('/') + 1;
-                // SC_TRACE("Loaded resource %s", entry.second.Substring(sl, entry.second.GetSize()).c_str());
+                int size = entry.second.GetSize() - sl - 1;
+                // SC_TRACE("Loaded resource %s %i", entry.second.Substring(sl, size).c_str(), size);
                 m_hashToResource.Emplace(resource,
-                                         entry.second.Substring(sl, entry.second.GetSize()));
+                                         entry.second.Substring(sl, size));
             }
 
             delete entry.first;

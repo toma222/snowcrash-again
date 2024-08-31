@@ -27,7 +27,7 @@ namespace SC
         {
         }
 
-        VkPhysicalDevice PhysicalDevice::PickDeviceFunctionFirstCompatible(ArrayList<VkPhysicalDevice> devices)
+        VkPhysicalDevice PhysicalDevice::PickDeviceFunctionFirstCompatible(ArrayList<VkPhysicalDevice> &devices)
         {
             for (int d = 0; d < devices.GetIndex(); d++)
             {

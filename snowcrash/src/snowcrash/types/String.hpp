@@ -15,6 +15,7 @@ namespace SC
 	public:
 		String();
 		String(const char *str);
+		String(const String &str);
 		~String();
 
 		int GetSize() const { return m_size; }
@@ -52,7 +53,7 @@ namespace SC
 			*this = string.c_str();
 		}
 
-		bool operator==(const String &str) const { return strcmp(str.c_str(), m_buffer); }
+		bool operator==(const String &str) const { return (strcmp(str.c_str(), m_buffer) == 0); }
 
 		bool operator>(const String &str) const { return (Hash() > str.Hash()); }
 		bool operator<(const String &str) const { return (Hash() < str.Hash()); }

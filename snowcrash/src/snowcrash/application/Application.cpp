@@ -19,7 +19,7 @@ namespace SC
 		SC_TRACE("Creating window");
 		m_window = new Window();
 
-		SC_TRACE("asdfasd");
+		// SC_TRACE("asdfasd");
 		ResourceImageLoader loader;
 		// loader->LoadResource(&r, String("snowcrash/templates/Sandbox3D/systems/Graphics/models/suzanne.obj"));
 		// delete loader;
@@ -32,8 +32,8 @@ namespace SC
 
 	Application::~Application()
 	{
-		// delete m_engine;
-		// delete m_window;
+		delete m_engine;
+		delete m_window;
 	}
 
 	void Application::Start()

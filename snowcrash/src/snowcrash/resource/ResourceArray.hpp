@@ -6,6 +6,7 @@
 #include <snowcrash/types/HashMap.hpp>
 #include <snowcrash/types/ArrayList.hpp>
 #include <snowcrash/types/String.hpp>
+#include <snowcrash/types/Pair.hpp>
 
 namespace SC
 {
@@ -17,12 +18,18 @@ namespace SC
 
         // puts a resource in a queue that can be loaded
         // it will not put in the full path, it will only put the file name
-        void QueueResourceForLoad(ResourceLoader *loader, String path);
+        template <class RL>
+        void QueueResourceForLoad(RL *loader, String path)
+        {
+            ResourceLoader *l = dynamic_cast<ResourceLoader *>(loader);
+            m_resourceLoadQueue.Add(Pair<ResourceLoader *, String>(l, path));
+        }
+
         void LoadResources();
 
         // is hashing or strcmp faster????
         template <class R>
-        R *GetResource(String path) const
+        const R *GetResource(String path) const
         {
             return dynamic_cast<R *>(m_hashToResource.Get(path));
         }

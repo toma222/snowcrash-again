@@ -2,6 +2,7 @@
 #pragma once
 
 #include <cstring>
+#include <utility>
 #include <snowcrash/core/Core.hpp>
 
 namespace SC
@@ -37,7 +38,18 @@ namespace SC
             return m_data[index];
         }
 
-        void Add(T item)
+        void Add(const T &item)
+        {
+            if (m_index >= m_capacity)
+            {
+                Resize(m_index + 1);
+            }
+
+            m_data[m_index] = item;
+            m_index++;
+        }
+
+        void Add(const T &&item)
         {
             if (m_index >= m_capacity)
             {
@@ -72,6 +84,14 @@ namespace SC
         T *GetArray() const { return m_data; }
 
         bool Empty() const { return (m_index == 0); }
+
+        ArrayList<T> operator=(const ArrayList<T> &arr)
+        {
+            ArrayList<T> t(arr.m_capacity);
+            memccpy(t.m_data, arr.m_data, arr.m_capacity * sizeof(T));
+            t.m_index = arr.m_index;
+            return t;
+        }
 
     private:
         void MoveRange(u32 dest, u32 source, u32 count)

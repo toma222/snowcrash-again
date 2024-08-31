@@ -48,11 +48,12 @@ int main(void)
     cont->DispatchEvents();
 
     ResourceArray resourceArray;
-    resourceArray.QueueResourceForLoad(static_cast<ResourceLoader *>(new ResourceImageLoader()), "snowcrash/templates/Sandbox3D/systems/Graphics/textures/viking_room.png");
+    resourceArray.QueueResourceForLoad(
+        new ResourceImageLoader(), "snowcrash/templates/Sandbox3D/systems/Graphics/textures/viking_room.png");
     resourceArray.LoadResources();
 
-    // ResourceImage *image = resourceArray.GetResource<ResourceImage>("viking_room.png");
-    // SC_TRACE("%i", image->GetHeight());
+    const ResourceImage *image = resourceArray.GetResource<ResourceImage>("viking_room.png");
+    SC_TRACE("%i", image->GetHeight());
 
     delete cont;
 

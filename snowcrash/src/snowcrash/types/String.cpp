@@ -21,6 +21,11 @@ namespace SC
 		*this = str;
 	}
 
+	String::String(const String &str)
+	{
+		*this = str.c_str();
+	}
+
 	String::~String()
 	{
 		if (m_buffer != nullptr)

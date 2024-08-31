@@ -27,7 +27,7 @@ namespace SC
 
             void DestroyDebugUtils() const;
 
-            static ArrayList<const char *> GetValidationLayers();
+            static void GetValidationLayers(ArrayList<const char *> &arr);
 
         private:
             void CreateDebugUtils();

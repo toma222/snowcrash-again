@@ -44,13 +44,15 @@ namespace SC
             createInfo.pEnabledFeatures = &deviceFeatures;
 
             // you set this even though you dont have to for backwards compatability
+
             const ArrayList<const char *> deviceExtensions = PhysicalDevice::GetRequiredExtensions();
             createInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.GetIndex());
             createInfo.ppEnabledExtensionNames = deviceExtensions.GetArray();
 
             if (SC_ENABLE_VALIDATION)
             {
-                ArrayList<const char *> validationLayers = Instance::GetValidationLayers();
+                ArrayList<const char *> validationLayers;
+                Instance::GetValidationLayers(validationLayers);
                 createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.GetIndex());
                 createInfo.ppEnabledLayerNames = validationLayers.GetArray();
             }

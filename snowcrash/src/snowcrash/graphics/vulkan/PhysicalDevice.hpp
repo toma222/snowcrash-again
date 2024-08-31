@@ -57,7 +57,7 @@ namespace SC
             QueueFamilyIndices FindQueueFamilies() { return FindQueueFamilies(this->m_physicalDevice); }
 
         private:
-            VkPhysicalDevice PickDeviceFunctionFirstCompatible(ArrayList<VkPhysicalDevice> devices);
+            VkPhysicalDevice PickDeviceFunctionFirstCompatible(ArrayList<VkPhysicalDevice> &devices);
             bool CheckDeviceExtensionSupport(VkPhysicalDevice device);
             SwapChainSupportDetails QuerySwapChainSupport(VkPhysicalDevice device);
             QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);

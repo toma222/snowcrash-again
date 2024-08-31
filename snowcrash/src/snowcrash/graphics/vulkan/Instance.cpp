@@ -9,11 +9,9 @@ namespace SC
 {
     namespace vulkan
     {
-        ArrayList<const char *> Instance::GetValidationLayers()
+        void Instance::GetValidationLayers(ArrayList<const char *> &arr)
         {
-            static ArrayList<const char *> validationLayers;
-            validationLayers.Add("VK_LAYER_KHRONOS_validation");
-            return validationLayers;
+            arr.Add("VK_LAYER_KHRONOS_validation");
         }
 
         static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
@@ -58,7 +56,8 @@ namespace SC
 
         bool CheckValidationLayerSupport()
         {
-            static ArrayList<const char *> validationLayers = Instance::GetValidationLayers();
+            ArrayList<const char *> validationLayers;
+            Instance::GetValidationLayers(validationLayers);
 
             uint32_t layerCount;
             vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
@@ -139,9 +138,12 @@ namespace SC
             if (SC_ENABLE_VALIDATION)
             {
                 SC_TRACE("Creating validation layers");
-                const ArrayList<const char *> validationLayers = GetValidationLayers();
-                createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.GetIndex());
-                createInfo.ppEnabledLayerNames = validationLayers.GetArray();
+                ArrayList<const char *> validationLayers;
+                Instance::GetValidationLayers(validationLayers);
+                const char *h = "VK_LAYER_KHRONOS_validation";
+
+                createInfo.enabledLayerCount = static_cast<uint32_t>(1);
+                createInfo.ppEnabledLayerNames = &h;
 
                 populateDebugMessengerCreateInfo(debugCreateInfo);
 
