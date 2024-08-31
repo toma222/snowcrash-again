@@ -35,19 +35,15 @@ namespace SC
             {
                 if (availablePresentModes[i] == VK_PRESENT_MODE_MAILBOX_KHR)
                 {
-                    SC_TRACE("using present mode VK_PRESENT_MODE_MAILBOX_KHR");
                     return availablePresentModes[i]; // prefer mailbox (cuz it fast and no tearing)
                 }
 
                 if (availablePresentModes[i] == VK_PRESENT_MODE_FIFO_RELAXED_KHR)
                 {
-                    SC_TRACE("using present mode VK_PRESENT_MODE_FIFO_RELAXED_KHR");
                     return availablePresentModes[i];
                 }
             }
 
-            // :3
-            SC_TRACE("using present mode FIFO_KHR");
             return VK_PRESENT_MODE_FIFO_KHR;
         }
 
@@ -75,7 +71,7 @@ namespace SC
         }
 
         Swapchain::Swapchain(Instance *instance, GLFWwindow *window, PhysicalDevice *physicalDevice, LogicalDevice *device)
-            : m_device(device), m_instance(instance), m_window(window)
+            : m_device(device), m_physicalDevice(physicalDevice), m_instance(instance), m_window(window)
         {
             CreateSwapchain(physicalDevice);
             GetSwapchainImages();
@@ -143,8 +139,6 @@ namespace SC
 
             m_swapChainImageFormat = surfaceFormat.format;
             m_swapChainExtent = extent;
-
-            GetSwapchainImages();
         }
 
         void Swapchain::GetSwapchainImages()
@@ -167,6 +161,16 @@ namespace SC
 
         void Swapchain::RecreateSwapchain()
         {
+            vkDestroySwapchainKHR(m_device->GetHandle(), m_swapchain, nullptr);
+
+            for (u32 i = 0; i < m_swapchainViews.GetIndex(); i++)
+            {
+                delete m_swapchainViews[i];
+            }
+
+            CreateSwapchain(m_physicalDevice);
+            GetSwapchainImages();
+            CreateSwapchainImageViews();
         }
 
         Swapchain::~Swapchain()

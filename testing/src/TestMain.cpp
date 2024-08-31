@@ -33,7 +33,7 @@ int main(void)
     // Testing strings
     String s("Hello World");
 
-    Context *cont = new Context();
+    Context *cont = new Context({"Test", Path("/")});
 
     TestLayer *l = new TestLayer(cont);
     cont->AddLayer(l);

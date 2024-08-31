@@ -7,6 +7,10 @@
 
 #include <snowcrash/events/EventManager.hpp>
 #include <snowcrash/events/ApplicationEvents.hpp>
+#include <snowcrash/resource/ResourceRawFile.hpp>
+#include <snowcrash/application/Project.hpp>
+
+#include <snowcrash/types/Path.hpp>
 
 namespace SC
 {
@@ -15,7 +19,7 @@ namespace SC
 	struct Context
 	{
 	public:
-		Context();
+		Context(Project project);
 		~Context();
 
 		template <typename T>
@@ -45,6 +49,8 @@ namespace SC
 	public:
 		ArrayList<Layer *> layerStack;
 		EventManager eventManager;
+		ResourceArray resourceArray;
+		Project currentProject;
 	};
 
 }

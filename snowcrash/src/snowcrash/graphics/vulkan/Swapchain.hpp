@@ -24,6 +24,7 @@ namespace SC
             VkFormat GetSwapchainFormat() const { return m_swapChainImageFormat; }
             VkExtent2D GetSwapchainExtent() const { return m_swapChainExtent; }
 
+            // does not call vkDeviceIdle
             void RecreateSwapchain();
 
         private:
@@ -37,6 +38,7 @@ namespace SC
             ArrayList<ImageView *> m_swapchainViews;
 
             LogicalDevice *m_device;
+            PhysicalDevice *m_physicalDevice;
             Instance *m_instance;
             GLFWwindow *m_window;
 

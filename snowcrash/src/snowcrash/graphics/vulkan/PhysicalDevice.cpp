@@ -38,7 +38,7 @@ namespace SC
                 }
             }
 
-            SC_ERROR("function did not find a suitible device.\n we are going to use the first device in the list and roll with it :3");
+            SC_WARN("function did not find a suitible device.\n we are going to use the first device in the list and roll with it :3");
             m_queueFamilyIndices = FindQueueFamilies(devices[0]);
             return devices[0];
         }

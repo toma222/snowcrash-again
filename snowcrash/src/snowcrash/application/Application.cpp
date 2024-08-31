@@ -19,8 +19,15 @@ namespace SC
 		SC_TRACE("Creating window");
 		m_window = new Window();
 
+		QueueResourceForLoad(new ResourceImageLoader(), "snowcrash/templates/Sandbox3D/systems/Graphics/textures/viking_room.png");
+
+		m_context->resourceArray.LoadResources();
+
+		const auto *image = GetResource<ResourceImage>("viking_room.png");
+		SC_TRACE("%i", image->GetWidth());
+
 		// SC_TRACE("asdfasd");
-		ResourceImageLoader loader;
+		// ResourceImageLoader loader;
 		// loader->LoadResource(&r, String("snowcrash/templates/Sandbox3D/systems/Graphics/models/suzanne.obj"));
 		// delete loader;
 
@@ -48,6 +55,7 @@ namespace SC
 		// Respond to any events that have been raised
 		m_context->DispatchEvents();
 
+		SC_TRACE("Entering application loop");
 		while (m_engine->GetRunning() == true)
 		{
 			// collect inputs

@@ -4,8 +4,8 @@
 namespace SC
 {
 
-    Context::Context()
-        : eventManager()
+    Context::Context(Project project)
+        : eventManager(), currentProject(project)
     {
     }
 

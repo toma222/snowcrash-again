@@ -18,7 +18,7 @@ int main(int argc, char **argv)
 
     SC_TRACE("Creating Context");
 
-    Context *context = new Context();
+    Context *context = new Context({"Sandbox3D", Path("snowcrash/templates/Sandbox3D")});
 
     SC_TRACE("Getting Application");
     Application *app = GetApplication(context);
