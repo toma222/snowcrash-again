@@ -5,6 +5,7 @@ namespace SC
 {
 
     Context::Context()
+        : eventManager()
     {
     }
 
@@ -12,7 +13,7 @@ namespace SC
     {
         SC_TRACE("Cleaning layer stack");
         for (int i = 0; i < layerStack.GetIndex(); i++)
-            delete layerStack.GetArray()[i];
+            delete layerStack[i];
     }
 
 }

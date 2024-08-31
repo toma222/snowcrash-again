@@ -24,6 +24,9 @@ namespace SC
     class ResourceLoader
     {
     public:
+        ResourceLoader() = default;
+        virtual ~ResourceLoader() = default;
+
         virtual void LoadResource(Resource **resource, String path) = 0;
     };
 } // namespace SC

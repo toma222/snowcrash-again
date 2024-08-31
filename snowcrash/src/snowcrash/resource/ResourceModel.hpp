@@ -11,7 +11,7 @@ namespace SC
     class ResourceModel : public Resource
     {
     public:
-        explicit ResourceModel(u32 hash, Model *model);
+        ResourceModel(u32 hash, Model *model);
         ~ResourceModel();
 
         const Model *GetModel() { return m_model; }
@@ -23,6 +23,9 @@ namespace SC
     class ResourceModelLoader : public ResourceLoader
     {
     public:
+        ResourceModelLoader() = default;
+        ~ResourceModelLoader() = default;
+
         void LoadResource(Resource **resource, String path) override;
     };
 } // namespace SC

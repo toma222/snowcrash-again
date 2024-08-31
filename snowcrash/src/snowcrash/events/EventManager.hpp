@@ -75,6 +75,7 @@ public:                                                                     \
 
     private:
         UnorderedMap<ArrayList<EventHandlerInterface *>, u32> m_eventHashInterfaceTable;
+        ArrayList<EventHandlerInterface *> m_interfaces;
         Queue<Event *> m_eventQueue;
     };
 

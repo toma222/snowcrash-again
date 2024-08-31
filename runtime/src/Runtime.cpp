@@ -7,5 +7,5 @@
 snowcrash::Application *GetApplication(snowcrash::Context *context)
 {
     runtime::RuntimeApplication *app = new runtime::RuntimeApplication(context);
-    return reinterpret_cast<snowcrash::Application*>(app);
+    return reinterpret_cast<snowcrash::Application *>(app);
 }

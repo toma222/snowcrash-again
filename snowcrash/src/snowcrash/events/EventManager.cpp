@@ -7,23 +7,20 @@ namespace SC
 {
 
     EventManager::EventManager()
-        : m_eventQueue(16) {} // can hold 16 events per frame
+        : m_eventQueue(16), m_interfaces() {} // can hold 16 events per frame
     EventManager::~EventManager()
     {
         SC_TRACE("Cleaning Event manager (not really because it keeps crashing lol)");
-        // Clean out the unordered map
-        ArrayList<Pair<ArrayList<EventHandlerInterface *>, u32>> &map = m_eventHashInterfaceTable.GetArray();
-        for (int i = 0; i < map.GetIndex(); i++)
+
+        for (int i = 0; i < m_interfaces.GetIndex(); i++)
         {
-            for (int j = 0; j < map.Get(i).first.GetIndex(); j++)
-            {
-                delete map.Get(i).first.GetArray()[j];
-            }
+            delete m_interfaces.Get(i);
         }
     }
 
     void EventManager::Subscribe(EventHandlerInterface *handler)
     {
+
         if (m_eventHashInterfaceTable.HasDuplicate(handler->GetEventHash()))
         {
             auto interfaceArray = m_eventHashInterfaceTable.Get(handler->GetEventHash());
@@ -31,12 +28,15 @@ namespace SC
         }
         else
         {
-            m_eventHashInterfaceTable.Enter(
-                ArrayList<EventHandlerInterface *>(),
-                handler->GetEventHash());
+            SC_TRACE("Subscribe");
+            // m_eventHashInterfaceTable.Enter(
+            //     ArrayList<EventHandlerInterface *>(1),
+            //     handler->GetEventHash());
 
             m_eventHashInterfaceTable.Get(handler->GetEventHash()).Add(handler);
         }
+
+        m_interfaces.Add(handler);
     }
 
     void EventManager::QueueEvent(Event *event)
@@ -50,12 +50,14 @@ namespace SC
         {
             m_eventQueue.Next();
             Event *e = m_eventQueue.TopElement();
-            auto handlerArray = m_eventHashInterfaceTable.Get(e->GetEventHash());
+            auto &handlerArray = m_eventHashInterfaceTable.Get(e->GetEventHash());
 
             for (int i = 0; i < handlerArray.GetIndex(); i++)
             {
                 handlerArray.Get(i)->Execute(*e);
             }
+
+            delete e;
         }
     }
 

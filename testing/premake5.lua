@@ -15,3 +15,10 @@ project "Testing"
         "snowcrash",
 		"glfw"
     }
+
+    
+    buildoptions 
+    {
+        "-static-libstdc++",
+        "-ggdb"
+    }

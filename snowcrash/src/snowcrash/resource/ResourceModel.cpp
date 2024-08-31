@@ -1,6 +1,8 @@
 
 #include "ResourceModel.hpp"
 
+// <3 thank you
+#define TINYOBJLOADER_IMPLEMENTATION
 #include <tinyobjloader/tiny_obj_loader.h>
 
 namespace SC
@@ -15,6 +17,8 @@ namespace SC
 
     void ResourceModelLoader::LoadResource(Resource **resource, String path)
     {
+        SC_TRACE("asda");
+
         tinyobj::attrib_t attrib;
         std::vector<tinyobj::shape_t> shapes;
         std::vector<tinyobj::material_t> materials;

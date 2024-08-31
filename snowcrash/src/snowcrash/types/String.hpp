@@ -28,6 +28,7 @@ namespace SC
 		String Substring(int index, int len) const;
 
 		int FindIndexOfChar(char c) const;
+		int LastIndexOfChar(char c) const;
 		char GetCharAtIndex(int i) const;
 
 		int FindIndexOfString(const char *string) const;
@@ -43,13 +44,18 @@ namespace SC
 			int strSize = strlen(string);
 			Resize(strSize + 1); // null terminator
 			strcpy(m_buffer, string);
-			m_buffer[strSize + 1] = '\0';
+			// m_buffer[strSize + 1] = '\0';
 		}
 
 		void operator=(const String &string)
 		{
 			*this = string.c_str();
 		}
+
+		bool operator==(const String &str) const { return strcmp(str.c_str(), m_buffer); }
+
+		bool operator>(const String &str) const { return (Hash() > str.Hash()); }
+		bool operator<(const String &str) const { return (Hash() < str.Hash()); }
 
 	private:
 		int m_size{0}; // the size of the string including the null terminator

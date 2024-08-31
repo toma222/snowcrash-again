@@ -12,7 +12,8 @@ namespace SC
 	class UnorderedMap
 	{
 	public:
-		UnorderedMap() = default;
+		UnorderedMap()
+			: m_array() {}
 		~UnorderedMap() = default;
 		UnorderedMap(u32 size)
 			: m_array(size) {}

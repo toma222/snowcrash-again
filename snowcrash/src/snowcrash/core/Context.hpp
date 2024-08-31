@@ -27,6 +27,7 @@ namespace SC
 		template <typename T>
 		inline void SubscribeEvent(const EventHandler<T> &callback)
 		{
+			SC_TRACE("subscribe event");
 			EventHandlerWrapper<T> *wrapper = new EventHandlerWrapper<T>(callback);
 			EventHandlerInterface *interface = (EventHandlerInterface *)wrapper;
 			eventManager.Subscribe(interface);
@@ -35,6 +36,7 @@ namespace SC
 		template <typename T>
 		inline void QueueEvent(T *event)
 		{
+			SC_TRACE("queueing event");
 			eventManager.QueueEvent(static_cast<Event *>(event));
 		}
 

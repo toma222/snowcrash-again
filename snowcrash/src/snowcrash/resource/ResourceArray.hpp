@@ -22,9 +22,9 @@ namespace SC
 
         // is hashing or strcmp faster????
         template <class R>
-        const Resource *GetResource(const String &path)
+        R *GetResource(String path) const
         {
-            return const_cast<const R *>(m_hashToResource.Get(path));
+            return dynamic_cast<R *>(m_hashToResource.Get(path));
         }
 
     private:

@@ -16,9 +16,14 @@ int main(int argc, char **argv)
 {
     using namespace snowcrash;
 
+    SC_TRACE("Creating Context");
+
     Context *context = new Context();
+
+    SC_TRACE("Getting Application");
     Application *app = GetApplication(context);
 
+    SC_TRACE("Starting Application");
     app->Start();
 
     delete app;

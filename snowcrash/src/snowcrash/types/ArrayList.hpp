@@ -24,6 +24,12 @@ namespace SC
             m_capacity = 1;
         }
 
+        ~ArrayList()
+        {
+            if (m_data != nullptr)
+                delete[] m_data;
+        }
+
         T &Get(int index) const
         {
             if (index >= m_index)
@@ -33,7 +39,7 @@ namespace SC
 
         void Add(T item)
         {
-            if (m_index > m_capacity)
+            if (m_index >= m_capacity)
             {
                 Resize(m_index + 1);
             }
@@ -45,7 +51,8 @@ namespace SC
         void Resize(int size)
         {
             T *copy = new T[size];
-            memcpy(copy, m_data, sizeof(T) * size);
+            for (u32 i = 0; i < m_index; i++)
+                copy[i] = m_data[i];
             delete[] m_data;
             m_data = copy;
             m_capacity = size;

@@ -23,7 +23,8 @@ namespace SC
 
 	String::~String()
 	{
-		delete[] m_buffer;
+		if (m_buffer != nullptr)
+			delete[] m_buffer;
 	}
 
 	void String::Resize(int size)
@@ -75,6 +76,11 @@ namespace SC
 		strcpy(str, m_buffer);
 		strcat(str, s.c_str());
 		return String(str);
+	}
+
+	int String::LastIndexOfChar(char c) const
+	{
+		return (int)(strrchr(m_buffer, c) - m_buffer);
 	}
 
 	u32 String::Hash() const

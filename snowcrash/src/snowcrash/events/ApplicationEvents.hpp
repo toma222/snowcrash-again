@@ -25,6 +25,8 @@ namespace SC
     public:
         EventApplicationError(String errormess)
             : errorMessage(errormess) {}
+        EventApplicationError() = default;
+        ~EventApplicationError() = default;
 
         String errorMessage;
     };
