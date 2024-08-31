@@ -18,6 +18,13 @@ namespace SC
     {
         ResourceImage::ImageData imageData;
         u8 *image = stbi_load(path.c_str(), &imageData.width, &imageData.height, &imageData.channels, 4);
+
+        if (image == nullptr)
+        {
+            error = "stbi_load returned error";
+            return;
+        }
+
         ResourceImage *rImage = new ResourceImage(path.Hash(), image, imageData);
         *resource = static_cast<Resource *>(rImage);
     }

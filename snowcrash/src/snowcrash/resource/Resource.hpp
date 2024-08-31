@@ -28,5 +28,10 @@ namespace SC
         virtual ~ResourceLoader() = default;
 
         virtual void LoadResource(Resource **resource, String path) = 0;
+
+        const String GetError() const { return error; }
+
+    protected:
+        String error;
     };
 } // namespace SC

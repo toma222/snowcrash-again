@@ -38,7 +38,7 @@ namespace SC
 
             if (resource == nullptr)
             {
-                SC_WARN("Resource load returned error");
+                SC_ERROR("Resource load returned error [%s]", entry.first->GetError().c_str());
             }
             else
             {

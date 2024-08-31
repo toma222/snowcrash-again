@@ -18,13 +18,15 @@ namespace SC
 
         int FileSize() const { return m_fileSize; }
 
+        String GetString() const { return m_path; }
+
         Path operator/=(const String &string)
         {
             String s = m_path.Substring(m_path.FindIndexOfString(string.c_str()));
             return Path(s);
         }
 
-        Path operator+=(const String &string)
+        Path operator+=(const String &string) const
         {
             String s = m_path.AppendString(string).c_str();
             return Path(s);

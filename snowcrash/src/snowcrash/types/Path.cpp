@@ -6,6 +6,7 @@
 namespace SC
 {
     Path::Path(String str)
+        : m_path(str)
     {
         struct stat buffer;
         int err = stat(str.c_str(), &buffer);

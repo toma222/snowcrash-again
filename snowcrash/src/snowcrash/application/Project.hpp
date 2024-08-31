@@ -10,8 +10,8 @@ namespace SC
 {
     struct Project
     {
-        String name;
-        Path projectPath;
+        const String name;
+        const Path projectPath;
     };
 
 } // namespace SC

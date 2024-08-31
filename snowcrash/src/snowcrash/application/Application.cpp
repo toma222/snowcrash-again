@@ -19,22 +19,12 @@ namespace SC
 		SC_TRACE("Creating window");
 		m_window = new Window();
 
-		QueueResourceForLoad(new ResourceImageLoader(), "snowcrash/templates/Sandbox3D/systems/Graphics/textures/viking_room.png");
+		QueueResourceForLoad<ResourceImageLoader>("systems/Graphics/textures/viking_room.png");
 
 		m_context->resourceArray.LoadResources();
 
 		const auto *image = GetResource<ResourceImage>("viking_room.png");
 		SC_TRACE("%i", image->GetWidth());
-
-		// SC_TRACE("asdfasd");
-		// ResourceImageLoader loader;
-		// loader->LoadResource(&r, String("snowcrash/templates/Sandbox3D/systems/Graphics/models/suzanne.obj"));
-		// delete loader;
-
-		// ResourceArray ra;
-		// ra.QueueResourceForLoad(new ResourceModelLoader(), "snowcrash/templates/Sandbox3D/systems/Graphics/models/suzanne.obj");
-		// ra.QueueResourceForLoad(new ResourceModelLoader(), "snowcrash/templates/Sandbox3D/systems/Graphics/models/cube.obj");
-		// ra.QueueResourceForLoad(new ResourceModelLoader(), "snowcrash/templates/Sandbox3D/systems/Graphics/models/viking_room.obj");
 	}
 
 	Application::~Application()

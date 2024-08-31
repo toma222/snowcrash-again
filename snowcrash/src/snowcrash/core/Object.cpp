@@ -11,14 +11,15 @@ namespace SC
 
 	Object::~Object() = default;
 
-	const Resource *Object::GetResourcePointer(String p)
+	const Resource *Object::GetResourcePointer(String name)
 	{
-		return m_context->resourceArray.GetResource<Resource>(p);
+		return m_context->resourceArray.GetResource<Resource>(name);
 	}
 
 	void Object::ContextQueueResourceLoad(
 		ResourceLoader *resourceLoader, String path)
 	{
-		m_context->resourceArray.QueueResourceForLoad(resourceLoader, path);
+		Path resourcePath = m_context->currentProject.projectPath += path;
+		m_context->resourceArray.QueueResourceForLoad(resourceLoader, resourcePath.GetString());
 	}
 }

@@ -50,9 +50,9 @@ namespace SC
 		}
 
 		template <class RL>
-		void QueueResourceForLoad(RL *resourceLoader, String path)
+		void QueueResourceForLoad(String path)
 		{
-			ContextQueueResourceLoad(static_cast<ResourceLoader *>(resourceLoader), path);
+			ContextQueueResourceLoad(static_cast<ResourceLoader *>(new RL()), path);
 		}
 
 	private:
