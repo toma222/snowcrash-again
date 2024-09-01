@@ -15,16 +15,9 @@ namespace SC
 
         for (int i = 0; i < resources.GetIndex(); i++)
         {
-            delete resources[0];
+            delete resources[i];
         }
     }
-
-    /*
-    void ResourceArray::QueueResourceForLoad(ResourceLoader *loader, String path)
-    {
-        m_resourceLoadQueue.Add(Pair<ResourceLoader *, String>(loader, path));
-    }
-    */
 
     void ResourceArray::LoadResources()
     {

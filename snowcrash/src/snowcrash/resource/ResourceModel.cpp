@@ -3,8 +3,7 @@
 
 // <3 thank you
 #define TINYOBJLOADER_IMPLEMENTATION
-#include <tinyobjloader/tiny_obj_loader.h>
-
+#include <tiny_obj_loader.h>
 namespace SC
 {
     ResourceModel::ResourceModel(u32 hash, Model *model)
@@ -17,8 +16,6 @@ namespace SC
 
     void ResourceModelLoader::LoadResource(Resource **resource, String path)
     {
-        SC_TRACE("asda");
-
         tinyobj::attrib_t attrib;
         std::vector<tinyobj::shape_t> shapes;
         std::vector<tinyobj::material_t> materials;
@@ -26,7 +23,9 @@ namespace SC
 
         if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, path.c_str()))
         {
-            SC_WARN("tinyobj loader error: %s\n warn %s\n", warn.c_str(), err.c_str());
+            // SC_WARN("tinyobj loader error: %s\n warn %s\n", warn.c_str(), err.c_str());
+            error = err.c_str();
+            return;
         }
 
         Model *model = new Model();

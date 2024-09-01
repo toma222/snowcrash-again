@@ -20,6 +20,15 @@ namespace SC
 		m_window = new Window();
 
 		QueueResourceForLoad<ResourceImageLoader>("systems/Graphics/textures/viking_room.png");
+		QueueResourceForLoad<ResourceImageLoader>("systems/Graphics/textures/checker-map_tho.png");
+		QueueResourceForLoad<ResourceImageLoader>("systems/Graphics/textures/512X512.png");
+
+		QueueResourceForLoad<ResourceModelLoader>("systems/Graphics/models/cube.obj");
+		QueueResourceForLoad<ResourceModelLoader>("systems/Graphics/models/suzanne.obj");
+		QueueResourceForLoad<ResourceModelLoader>("systems/Graphics/models/viking_room.obj");
+
+		QueueResourceForLoad<ResourceRawFileLoader>("systems/Graphics/shaders/frag.spv");
+		QueueResourceForLoad<ResourceRawFileLoader>("systems/Graphics/shaders/vert.spv");
 
 		m_context->resourceArray.LoadResources();
 

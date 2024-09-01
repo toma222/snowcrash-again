@@ -3,22 +3,26 @@ project "Testing"
     kind "ConsoleApp"
     files "src/**"
 
+    language "C++"
+    cppdialect "C++17"
+
     includedirs 
     {
         "%{wks.location}/snowcrash/src",
+        "%{wks.location}/external/tinyobjloader",
 		"%{wks.location}/external/glfw/include",
         "src"
     }
 
     links
     {
-        "snowcrash",
-		"glfw"
+        --"snowcrash",
+		--"glfw"
     }
-
     
-    buildoptions 
+    linkoptions
     {
         "-static-libstdc++",
+        "-static-libgcc",
         "-ggdb"
     }

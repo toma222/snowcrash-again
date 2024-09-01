@@ -15,6 +15,7 @@ namespace SC
 
     void ResourceRawFileLoader::LoadResource(Resource **resource, String path)
     {
+
         std::ifstream file(path.c_str(), std::ios::ate | std::ios::binary);
 
         if (!file.is_open())

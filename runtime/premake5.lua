@@ -19,5 +19,13 @@ project "Runtime"
         "snowcrash",
 		"glfw",
         "mingw32",
+        "opengl32",
+        "gdi32",
         "%{Library.Vulkan}"
+    }
+
+    linkoptions
+    {
+        "-static-libstdc++",
+        "-static-libgcc"
     }

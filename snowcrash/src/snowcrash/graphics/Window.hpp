@@ -2,6 +2,8 @@
 #pragma once
 
 #include <snowcrash/core/Core.hpp>
+
+#define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
 namespace SC

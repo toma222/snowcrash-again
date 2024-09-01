@@ -2,7 +2,6 @@
 include "dependencies.lua"
 
 workspace "Snowcrash Suite"
-    language "C++"
     architecture "x86_64"
     startproject "snowcrash"
     configurations {"Debug", "Release"}
@@ -18,11 +17,7 @@ workspace "Snowcrash Suite"
 
     filter {}
 
-    links {
-        "mingw32",
-        "opengl32",
-        "gdi32"
-    }
+
 
     targetdir ("build/%{prj.name}/%{cfg.longname}")
     objdir ("build/Obj/%{prj.name}/%{cfg.longname}")
