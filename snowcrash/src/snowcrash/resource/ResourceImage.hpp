@@ -20,6 +20,8 @@ namespace SC
         ResourceImage(u32 hash, u8 *image, const ImageData d);
         ~ResourceImage() override;
 
+        u8 *GetImage() const { return m_image; }
+
         int GetWidth() const { return m_imageData.width; }
         int GetHeight() const { return m_imageData.height; }
         int GetChannels() const { return m_imageData.channels; }

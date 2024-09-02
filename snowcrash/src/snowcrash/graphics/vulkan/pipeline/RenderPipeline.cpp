@@ -149,7 +149,7 @@ namespace SC
             pipelineInfo.pColorBlendState = &colorBlending;
             pipelineInfo.pDynamicState = &dynamicState;
             pipelineInfo.layout = m_layout;
-            pipelineInfo.renderPass = def.renderPass.GetHandle();
+            pipelineInfo.renderPass = def.renderPass->GetHandle();
             pipelineInfo.subpass = 0;
             pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
             pipelineInfo.basePipelineIndex = -1;              // Optional

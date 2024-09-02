@@ -76,6 +76,7 @@ namespace SC
 
         class DescriptorTextureSampler : public Descriptor
         {
+        public:
             DescriptorTextureSampler(TextureSampler *ts, ImageView *view, int count = 1)
                 : m_textureSampler(ts), m_imageView(view)
             {

@@ -69,7 +69,7 @@ namespace SC
             {
                 Mode mode;
                 Depth depth;
-                RenderPass renderPass;
+                RenderPass *renderPass;
                 ArrayList<ShaderModule *> shaderModules;
                 ArrayList<VkPushConstantRange> pushConstants;
                 VertexDescription *vertexDescription;

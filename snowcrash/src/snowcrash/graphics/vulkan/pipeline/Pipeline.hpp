@@ -9,7 +9,7 @@ namespace SC
         {
         public:
             Pipeline() = default;
-            virtual ~Pipeline();
+            virtual ~Pipeline() = default;
         };
     } // namespace vulkan
 

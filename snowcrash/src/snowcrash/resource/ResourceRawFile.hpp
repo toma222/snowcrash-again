@@ -12,8 +12,8 @@ namespace SC
         ResourceRawFile(u32 hash, char *file, int size);
         ~ResourceRawFile();
 
-        const char *GetBytes() { return m_file; }
-        const int GetSize() { return m_size; }
+        char *GetBytes() const { return m_file; }
+        const int GetSize() const { return m_size; }
 
     private:
         char *m_file;
