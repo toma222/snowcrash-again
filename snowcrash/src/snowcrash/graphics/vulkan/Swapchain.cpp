@@ -144,29 +144,33 @@ namespace SC
         void Swapchain::GetSwapchainImages()
         {
             // Get swapchain images
+            // ! memeory leak????
             uint32_t imageCount;
             vkGetSwapchainImagesKHR(m_device->GetHandle(), m_swapchain, &imageCount, nullptr);
             m_swapchainImages.Resize(imageCount);
+            m_swapchainImages.SetIndex(imageCount);
             vkGetSwapchainImagesKHR(m_device->GetHandle(), m_swapchain, &imageCount, m_swapchainImages.GetArray());
         }
 
         void Swapchain::CreateSwapchainImageViews()
         {
-            m_swapchainViews.Resize(m_swapchainImages.GetIndex());
-            for (u32 i = 0; i < m_swapchainViews.GetIndex(); i++)
+            for (int i = 0; i < m_swapchainImages.GetIndex(); i++)
             {
-                m_swapchainViews[i] = new ImageView(m_device, m_swapchainImages[i], m_swapChainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
+                ImageView *view = new ImageView(m_device, m_swapchainImages[i], m_swapChainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
+                m_swapchainViews.Add(view);
             }
         }
 
         void Swapchain::RecreateSwapchain()
         {
-            vkDestroySwapchainKHR(m_device->GetHandle(), m_swapchain, nullptr);
-
             for (u32 i = 0; i < m_swapchainViews.GetIndex(); i++)
             {
                 delete m_swapchainViews[i];
             }
+
+            m_swapchainViews.SetIndex(0);
+
+            vkDestroySwapchainKHR(m_device->GetHandle(), m_swapchain, nullptr);
 
             CreateSwapchain(m_physicalDevice);
             GetSwapchainImages();
@@ -181,6 +185,25 @@ namespace SC
             {
                 delete m_swapchainViews[i];
             }
+        }
+
+        u32 Swapchain::AcquireNextImage(Semaphore *semaphore) const
+        {
+            u32 imageIndex;
+            VkResult result = vkAcquireNextImageKHR(m_device->GetHandle(), m_swapchain,
+                                                    UINT64_MAX, semaphore->GetHandle(), VK_NULL_HANDLE, &imageIndex);
+
+            if (result == VK_ERROR_OUT_OF_DATE_KHR)
+            {
+                SC_WARN("Out of date KHR");
+                return 0;
+            }
+            else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
+            {
+                SC_ERROR("failed to acquire swap chain image!");
+            }
+
+            return imageIndex;
         }
     } // namespace vulkan
 }

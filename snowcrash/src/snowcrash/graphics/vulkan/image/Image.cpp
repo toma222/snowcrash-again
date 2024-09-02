@@ -165,6 +165,8 @@ namespace SC
 
         Image::~Image()
         {
+            vkFreeMemory(m_device->GetHandle(), m_imageMemory, nullptr);
+            vkDestroyImage(m_device->GetHandle(), m_image, nullptr);
         }
 
     } // namespace vulkan

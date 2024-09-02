@@ -23,6 +23,8 @@ namespace SC
 
             VkCommandPool GetHandle() const { return m_commandPool; }
 
+            VkCommandBuffer GetCommandBuffer(int i) { return m_commandBuffers[i]; }
+
         private:
             VkCommandPool m_commandPool;
 

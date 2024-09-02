@@ -31,9 +31,6 @@ namespace SC
 		QueueResourceForLoad<ResourceRawFileLoader>("systems/Graphics/shaders/vert.spv");
 
 		m_context->resourceArray.LoadResources();
-
-		const auto *image = GetResource<ResourceImage>("viking_room.png");
-		SC_TRACE("%i", image->GetWidth());
 	}
 
 	Application::~Application()
@@ -49,6 +46,7 @@ namespace SC
 		for (int i = 0; i < m_context->layerStack.GetIndex(); i++)
 		{
 			m_context->layerStack[i]->Init();
+			SC_TRACE("Done initing layers");
 		}
 
 		// Respond to any events that have been raised

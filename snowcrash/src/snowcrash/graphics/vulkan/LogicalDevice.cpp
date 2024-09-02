@@ -71,6 +71,11 @@ namespace SC
             vkGetDeviceQueue(m_device, physicalDevice->GetQueueFamilyIndices().presentFamily.value(), 0, &m_presentQueue);
         }
 
+        void LogicalDevice::DeviceWaitIdle() const
+        {
+            vkDeviceWaitIdle(m_device);
+        }
+
         LogicalDevice::~LogicalDevice()
         {
             vkDestroyDevice(m_device, nullptr);

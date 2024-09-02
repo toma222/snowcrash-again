@@ -12,7 +12,7 @@ namespace SC
     namespace vulkan
     {
         TextureImage2D::TextureImage2D(PhysicalDevice *physicalDevice, LogicalDevice *device, CommandPool *pool, u8 *image, const TextureData &data, bool mipmap)
-            : m_device(device), m_commandPool(pool)
+            : m_device(device), m_commandPool(pool), m_width(data.width), m_height(data.height)
         {
             m_mipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(data.width, data.height)))) + 1;
 
@@ -37,7 +37,7 @@ namespace SC
 
             delete stagingBuffer;
 
-            m_imageView = new ImageView(m_device, m_image->Get(), VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_ASPECT_COLOR_BIT, m_mipLevels);
+            m_imageView = new ImageView(m_device, m_image->GetHandle(), VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_ASPECT_COLOR_BIT, m_mipLevels);
         }
 
         void TextureImage2D::GenerateMipmaps(PhysicalDevice *physicalDevice, VkFormat imageFormat)
@@ -54,7 +54,7 @@ namespace SC
 
             VkImageMemoryBarrier barrier{};
             barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-            barrier.image = m_image->Get();
+            barrier.image = m_image->GetHandle();
             barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
             barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
             barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -94,8 +94,8 @@ namespace SC
                 blit.dstSubresource.layerCount = 1;
 
                 vkCmdBlitImage(commandBuffer.Get(),
-                               m_image->Get(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                               m_image->Get(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                               m_image->GetHandle(), VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                               m_image->GetHandle(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                                1, &blit,
                                VK_FILTER_LINEAR);
 
@@ -133,6 +133,8 @@ namespace SC
 
         TextureImage2D::~TextureImage2D()
         {
+            delete m_image;
+            delete m_imageView;
         }
     } // namespace vulkan
 } // namespace SC

@@ -23,7 +23,7 @@ namespace SC
 
             void TransitionImageLayout(CommandPool *pool, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, uint32_t mipLevels);
 
-            VkImage Get() { return m_image; }
+            VkImage GetHandle() { return m_image; }
 
             uint32_t GetWidth() { return m_width; }
             uint32_t GetHeight() { return m_height; }

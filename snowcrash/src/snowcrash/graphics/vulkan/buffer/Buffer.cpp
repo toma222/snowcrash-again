@@ -101,7 +101,7 @@ namespace SC
             vkCmdCopyBufferToImage(
                 commandBuffer.Get(),
                 m_buffer,
-                dst->Get(),
+                dst->GetHandle(),
                 VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                 1,
                 &region);

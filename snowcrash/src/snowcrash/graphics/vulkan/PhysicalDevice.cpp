@@ -21,6 +21,7 @@ namespace SC
             vkEnumeratePhysicalDevices(m_instance->GetHandle(), &deviceCount, devices.GetArray());
 
             m_physicalDevice = PickDeviceFunctionFirstCompatible(devices);
+            m_properties.mssaSamples = GetMaxUsableSampleCount();
         }
 
         PhysicalDevice::~PhysicalDevice()
@@ -156,6 +157,42 @@ namespace SC
             }
 
             return (numberOfMatchedExtensions == requiredExtensions.GetIndex());
+        }
+
+        VkSampleCountFlagBits PhysicalDevice::GetMaxUsableSampleCount()
+        {
+            VkPhysicalDeviceProperties physicalDeviceProperties;
+            vkGetPhysicalDeviceProperties(m_physicalDevice, &physicalDeviceProperties);
+
+            VkSampleCountFlags counts = physicalDeviceProperties.limits.framebufferColorSampleCounts & physicalDeviceProperties.limits.framebufferDepthSampleCounts;
+
+            if (counts & VK_SAMPLE_COUNT_64_BIT)
+            {
+                return VK_SAMPLE_COUNT_64_BIT;
+            }
+            if (counts & VK_SAMPLE_COUNT_32_BIT)
+            {
+                return VK_SAMPLE_COUNT_32_BIT;
+            }
+            if (counts & VK_SAMPLE_COUNT_16_BIT)
+            {
+                return VK_SAMPLE_COUNT_16_BIT;
+            }
+            if (counts & VK_SAMPLE_COUNT_8_BIT)
+            {
+                return VK_SAMPLE_COUNT_8_BIT;
+            }
+            if (counts & VK_SAMPLE_COUNT_4_BIT)
+            {
+                return VK_SAMPLE_COUNT_4_BIT;
+            }
+            if (counts & VK_SAMPLE_COUNT_2_BIT)
+            {
+                return VK_SAMPLE_COUNT_2_BIT;
+            }
+
+            SC_WARN("Max usable sample count is 1; :|");
+            return VK_SAMPLE_COUNT_1_BIT;
         }
 
         const ArrayList<const char *> PhysicalDevice::GetRequiredExtensions()

@@ -34,13 +34,13 @@ namespace SC
             void Add(Type t);
 
             VkVertexInputAttributeDescription *GetAttributes() const { return m_descriptions.GetArray(); }
-            VkVertexInputBindingDescription GetBinding() const { return m_binding; }
+            VkVertexInputBindingDescription GetBinding() const;
             int GetAttributesCount() const { return count; }
             u32 GetSize() const { return size; }
 
         private:
             ArrayList<VkVertexInputAttributeDescription> m_descriptions;
-            VkVertexInputBindingDescription m_binding;
+            // VkVertexInputBindingDescription m_binding;
 
             int size{0};
             int count{0};
@@ -80,9 +80,24 @@ namespace SC
             RenderPipeline(Swapchain *swapchain, PhysicalDevice *physicalDevice, LogicalDevice *logicalDevice, const RenderPipelineDef &def);
             ~RenderPipeline();
 
+            void BeginRenderPass(VkCommandBuffer buffer, RenderPass *renderPass, VkFramebuffer framebuffer, VkExtent2D extent);
+            void BindPipeline(VkCommandBuffer buffer);
+            void EndRenderPass(VkCommandBuffer buffer);
+
+            void SetViewport(VkCommandBuffer buffer, int width, int height);
+            void SetScissor(VkCommandBuffer buffer, VkExtent2D extent);
+
+            void DrawIndexed(VkCommandBuffer buffer, u32 indexCount);
+
+            template <class P>
+            void BindPushConstant(VkCommandBuffer buffer, VkShaderStageFlags stage, P *p)
+            {
+                vkCmdPushConstants(buffer, m_layout, stage, 0, sizeof(P), p);
+            }
+
         private:
             void CreatePipelineLayout(const RenderPipelineDef &def);
-            void CreateShaderStages(ArrayList<ShaderModule *> shaderModules);
+            void CreateShaderStages(const RenderPipelineDef &def);
             VkPipelineDynamicStateCreateInfo CreateDynamicState();
 
         private:

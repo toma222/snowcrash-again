@@ -63,6 +63,7 @@ namespace SC
             SwapChainSupportDetails QuerySwapChainSupport(VkPhysicalDevice device);
             QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
             bool IsDeviceSuitable(VkPhysicalDevice device);
+            VkSampleCountFlagBits GetMaxUsableSampleCount();
 
         private:
             Instance *m_instance;

@@ -15,6 +15,9 @@
 #include <snowcrash/graphics/vulkan/pipeline/RenderPipeline.hpp>
 #include <snowcrash/graphics/vulkan/image/TextureImage2D.hpp>
 
+#include <snowcrash/graphics/vulkan/sync/Fence.hpp>
+#include <snowcrash/graphics/vulkan/sync/Semaphore.hpp>
+
 #include <glm/glm.hpp>
 
 namespace SC
@@ -57,7 +60,13 @@ namespace SC
 		vulkan::TextureSampler *m_textureSampler;
 		vulkan::TextureImage2D *m_textureImage;
 
+		vulkan::DescriptorLayout *m_layout;
+
 		ArrayList<vulkan::ShaderModule *> m_shaderModules;
+
+		vulkan::Fence *m_fence;
+		vulkan::Semaphore *m_imageAvailableSemaphore;
+		vulkan::Semaphore *m_renderFinishedSemaphore;
 
 		Window *m_window;
 	};

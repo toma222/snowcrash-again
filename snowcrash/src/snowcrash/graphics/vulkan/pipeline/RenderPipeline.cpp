@@ -10,6 +10,16 @@ namespace SC
         VertexDescription::VertexDescription() = default;
         VertexDescription::~VertexDescription() = default;
 
+        // ! the binding is always zero
+        VkVertexInputBindingDescription VertexDescription::GetBinding() const
+        {
+            VkVertexInputBindingDescription d;
+            d.binding = 0;
+            d.stride = size;
+            d.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+            return d;
+        }
+
         void VertexDescription::Add(Type t)
         {
             VkVertexInputAttributeDescription description;
@@ -29,7 +39,7 @@ namespace SC
                 description.format = VK_FORMAT_R32G32B32_SFLOAT;
                 description.location = count;
                 description.offset = size;
-                size += (sizeof(float) * 2);
+                size += (sizeof(float) * 3);
                 break;
             }
 
@@ -41,13 +51,25 @@ namespace SC
         RenderPipeline::RenderPipeline(Swapchain *swapchain, PhysicalDevice *physicalDevice, LogicalDevice *logicalDevice, const RenderPipelineDef &def)
             : m_device(logicalDevice)
         {
-            CreateShaderStages(def.shaderModules);
+            SC_TRACE("herer");
+            CreateShaderStages(def);
 
-            VkPipelineDynamicStateCreateInfo dynamicState = CreateDynamicState();
+            // VkPipelineDynamicStateCreateInfo dynamicState = CreateDynamicState();
 
-            auto bindingDescription = def.vertexDescription->GetBinding();
+            ArrayList<VkDynamicState> dynamicStates;
+            dynamicStates.Add(VK_DYNAMIC_STATE_VIEWPORT);
+            dynamicStates.Add(VK_DYNAMIC_STATE_SCISSOR);
+
+            VkPipelineDynamicStateCreateInfo dynamicState{};
+            dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+            dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.GetIndex());
+            dynamicState.pDynamicStates = dynamicStates.GetArray();
+
+            SC_TRACE("herer");
+            VkVertexInputBindingDescription bindingDescription = def.vertexDescription->GetBinding();
             auto attributeDescriptions = def.vertexDescription->GetAttributes();
 
+            SC_TRACE("herer");
             VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
             vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
             vertexInputInfo.vertexBindingDescriptionCount = 1;
@@ -136,6 +158,8 @@ namespace SC
             depthStencil.front = {}; // Optional
             depthStencil.back = {};  // Optional
 
+            CreatePipelineLayout(def);
+
             VkGraphicsPipelineCreateInfo pipelineInfo{};
             pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
             pipelineInfo.stageCount = m_shaderStages.GetIndex();
@@ -154,10 +178,13 @@ namespace SC
             pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
             pipelineInfo.basePipelineIndex = -1;              // Optional
 
+            SC_TRACE("herer");
             if (vkCreateGraphicsPipelines(m_device->GetHandle(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_pipeline) != VK_SUCCESS)
             {
                 SC_WARN("failed to create graphics pipeline!");
             }
+
+            SC_TRACE("herer");
         }
 
         void RenderPipeline::CreatePipelineLayout(const RenderPipelineDef &def)
@@ -166,8 +193,8 @@ namespace SC
             auto &layouts = def.descriptorSet->GetLayouts();
 
             pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-            pipelineLayoutInfo.setLayoutCount = layouts.GetIndex(); // Optional
-            pipelineLayoutInfo.pSetLayouts = layouts.GetArray();    // Optional
+            pipelineLayoutInfo.setLayoutCount = layouts.GetIndex();                      // Optional
+            pipelineLayoutInfo.pSetLayouts = def.descriptorSet->GetLayouts().GetArray(); // Optional
             pipelineLayoutInfo.pushConstantRangeCount = def.pushConstants.GetIndex();
             pipelineLayoutInfo.pPushConstantRanges = def.pushConstants.GetArray();
 
@@ -177,12 +204,15 @@ namespace SC
             }
         }
 
-        void RenderPipeline::CreateShaderStages(ArrayList<ShaderModule *> shaderModules)
+        void RenderPipeline::CreateShaderStages(const RenderPipelineDef &def)
         {
+            auto &shaderModules = def.shaderModules;
+
             for (int i = 0; i < shaderModules.GetIndex(); i++)
             {
                 VkPipelineShaderStageCreateInfo shaderStageInfo{};
                 shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+
                 switch (shaderModules[i]->GetShaderType())
                 {
                 case ShaderModule::ShaderType_Fragment:
@@ -193,14 +223,17 @@ namespace SC
                     shaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
                     break;
                 }
+
                 shaderStageInfo.module = shaderModules[i]->GetHandle();
                 shaderStageInfo.pName = "main";
                 m_shaderStages.Add(shaderStageInfo);
             }
         }
 
+        // ! this dont work no more
         VkPipelineDynamicStateCreateInfo RenderPipeline::CreateDynamicState()
         {
+            /*
             ArrayList<VkDynamicState> dynamicStates;
             dynamicStates.Add(VK_DYNAMIC_STATE_VIEWPORT);
             dynamicStates.Add(VK_DYNAMIC_STATE_SCISSOR);
@@ -209,12 +242,67 @@ namespace SC
             dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
             dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.GetIndex());
             dynamicState.pDynamicStates = dynamicStates.GetArray();
+            */
 
-            return dynamicState;
+            return VkPipelineDynamicStateCreateInfo{};
+        }
+
+        void RenderPipeline::BeginRenderPass(VkCommandBuffer buffer, RenderPass *renderPass, VkFramebuffer framebuffer, VkExtent2D extent)
+        {
+            VkRenderPassBeginInfo renderPassInfo{};
+            renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+            renderPassInfo.renderPass = renderPass->GetHandle();
+            renderPassInfo.framebuffer = framebuffer; // m_swapchain->GetFramebuffer(imageIndex)->Get(); // m_swapChainFramebuffers[imageIndex];
+            renderPassInfo.renderArea.offset = {0, 0};
+            renderPassInfo.renderArea.extent = extent;
+
+            // ! calling malloc every frame is not cool dude
+            ArrayList<VkClearValue> clearValues(2);
+            clearValues[0].color = {{0.0f, 0.0f, 0.0f, 1.0f}};
+            clearValues[1].depthStencil = {1.0f, 0};
+
+            renderPassInfo.clearValueCount = static_cast<uint32_t>(2);
+            renderPassInfo.pClearValues = clearValues.GetArray();
+
+            vkCmdBeginRenderPass(buffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+        }
+        void RenderPipeline::BindPipeline(VkCommandBuffer buffer)
+        {
+            vkCmdBindPipeline(buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
+        }
+        void RenderPipeline::EndRenderPass(VkCommandBuffer buffer)
+        {
+            vkCmdEndRenderPass(buffer);
+        }
+
+        void RenderPipeline::SetViewport(VkCommandBuffer buffer, int width, int height)
+        {
+            VkViewport viewport{};
+            viewport.x = 0.0f;
+            viewport.y = 0.0f;
+            viewport.width = (float)width;
+            viewport.height = (float)height;
+            viewport.minDepth = 0.0f;
+            viewport.maxDepth = 1.0f;
+            vkCmdSetViewport(buffer, 0, 1, &viewport);
+        }
+
+        void RenderPipeline::SetScissor(VkCommandBuffer buffer, VkExtent2D extent)
+        {
+            VkRect2D scissor{};
+            scissor.offset = {0, 0};
+            scissor.extent = extent;
+            vkCmdSetScissor(buffer, 0, 1, &scissor);
+        }
+
+        void RenderPipeline::DrawIndexed(VkCommandBuffer buffer, u32 indexCount)
+        {
+            vkCmdDrawIndexed(buffer, indexCount, 1, 0, 0, 0);
         }
 
         RenderPipeline::~RenderPipeline()
         {
+            vkDestroyPipelineLayout(m_device->GetHandle(), m_layout, nullptr);
             vkDestroyPipeline(m_device->GetHandle(), m_pipeline, nullptr);
         }
     } // namespace vulkan

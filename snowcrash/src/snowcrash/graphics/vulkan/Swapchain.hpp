@@ -7,6 +7,7 @@
 
 #include <snowcrash/graphics/vulkan/LogicalDevice.hpp>
 #include <snowcrash/graphics/vulkan/image/ImageView.hpp>
+#include <snowcrash/graphics/vulkan/sync/Semaphore.hpp>
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
@@ -23,6 +24,11 @@ namespace SC
 
             VkFormat GetSwapchainFormat() const { return m_swapChainImageFormat; }
             VkExtent2D GetSwapchainExtent() const { return m_swapChainExtent; }
+            ArrayList<ImageView *> &GetSwapchainImageViews() { return m_swapchainViews; }
+
+            VkSwapchainKHR GetHandle() const { return m_swapchain; }
+
+            u32 AcquireNextImage(Semaphore *semaphore) const;
 
             // does not call vkDeviceIdle
             void RecreateSwapchain();

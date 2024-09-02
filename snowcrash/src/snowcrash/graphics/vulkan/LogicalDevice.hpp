@@ -23,6 +23,9 @@ namespace SC
             VkQueue GetGraphicsQueue() { return m_graphicsQueue; }
             VkQueue GetPresentQueue() { return m_presentQueue; }
 
+            // This stalls the main thread until everything is done
+            void DeviceWaitIdle() const;
+
         private:
             VkDevice m_device;
             VkQueue m_graphicsQueue;

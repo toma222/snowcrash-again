@@ -17,15 +17,15 @@ namespace SC
         class DescriptorLayout
         {
         public:
-            DescriptorLayout(LogicalDevice *device, ArrayList<Descriptor *> descriptorArray);
+            DescriptorLayout(LogicalDevice *device, ArrayList<Descriptor *> *descriptorArray);
             ~DescriptorLayout();
 
             VkDescriptorSetLayout GetHandle() { return m_layout; }
-            ArrayList<Descriptor *> &GetDescriptorArray() { return m_descriptorArray; }
+            ArrayList<Descriptor *> &GetDescriptorArray() { return *m_descriptorArray; }
 
         private:
             LogicalDevice *m_device;
-            ArrayList<Descriptor *> m_descriptorArray;
+            ArrayList<Descriptor *> *m_descriptorArray;
 
             VkDescriptorSetLayout m_layout;
         };

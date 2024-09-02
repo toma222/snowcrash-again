@@ -3,15 +3,13 @@
 
 #include <snowcrash/core/Logging.hpp>
 
-#include <snowcrash/graphics/vulkan/image/Image.hpp>
-
 namespace SC
 {
     namespace vulkan
     {
 
-        RenderPass::RenderPass(Swapchain *swapchain, LogicalDevice *logicalDevice, PhysicalDevice *physicalDevice)
-            : m_device(logicalDevice)
+        RenderPass::RenderPass(Swapchain *swapchain, LogicalDevice *logicalDevice, PhysicalDevice *physicalDevice, CommandPool *pool)
+            : m_device(logicalDevice), m_physicalDevice(physicalDevice), m_swapchain(swapchain), m_commandPool(pool)
         {
             VkAttachmentDescription colorAttachment{};
             colorAttachment.format = swapchain->GetSwapchainFormat();
@@ -91,10 +89,91 @@ namespace SC
             {
                 SC_WARN("failed to create render pass!");
             }
+
+            CreateRenderPassResources(physicalDevice, m_device, swapchain, pool);
+
+            CreateFramebuffers();
+        }
+
+        void RenderPass::DestroyFramebuffers()
+        {
+            for (int i = 0; i < m_framebuffers.GetIndex(); i++)
+            {
+                delete m_framebuffers[i];
+            }
+
+            delete m_colorImage;
+            delete m_colorImageView;
+
+            delete m_depthImage;
+            delete m_depthImageView;
+
+            m_framebuffers.SetIndex(0);
+        }
+        void RenderPass::CreateFramebuffers()
+        {
+            CreateRenderPassResources(m_physicalDevice, m_device, m_swapchain, m_commandPool);
+
+            // Create framebuffers
+            const VkExtent2D scExtent = m_swapchain->GetSwapchainExtent();
+            const u32 swapchainImages = m_swapchain->GetSwapchainImageViews().GetIndex();
+            SC_TRACE("%i, %i", scExtent.width, scExtent.height);
+            for (int i = 0; i < swapchainImages; i++)
+            {
+                // define the framebuffer attachments
+                ArrayList<VkImageView> attachments;
+                attachments.Add(m_colorImageView->GetHandle());
+                attachments.Add(m_depthImageView->GetHandle());
+                attachments.Add(m_swapchain->GetSwapchainImageViews()[i]->GetHandle());
+
+                m_framebuffers.Add(
+                    new Framebuffer(m_device, scExtent.width, scExtent.height,
+                                    m_renderPass, attachments.GetArray(), attachments.GetIndex()));
+            }
+        }
+
+        inline void RenderPass::CreateRenderPassResources(PhysicalDevice *physicalDevice, LogicalDevice *device, Swapchain *swapchain, CommandPool *commandPool)
+        {
+            // --==========================--
+            //        COLOR RESOURCES
+            // --==========================--
+            VkFormat colorFormat = swapchain->GetSwapchainFormat();
+
+            m_colorImage = new Image(physicalDevice, device, swapchain->GetSwapchainExtent().width, swapchain->GetSwapchainExtent().height, 1, physicalDevice->GetDeviceProperties().mssaSamples,
+                                     colorFormat,
+                                     VK_IMAGE_TILING_OPTIMAL,
+                                     VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+                                     VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+            m_colorImageView = new ImageView(
+                device, m_colorImage->GetHandle(), colorFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
+
+            // --==========================--
+            //        DEPTH RESOURCES
+            // --==========================--
+            VkFormat depthFormat = Image::FindSupportedFormat(physicalDevice,
+                                                              {VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT},
+                                                              VK_IMAGE_TILING_OPTIMAL,
+                                                              VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);
+
+            m_depthImage = new Image(physicalDevice, device, swapchain->GetSwapchainExtent().width, swapchain->GetSwapchainExtent().height, 1,
+                                     physicalDevice->GetDeviceProperties().mssaSamples, depthFormat,
+                                     VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+            m_depthImageView = new ImageView(device, m_depthImage->GetHandle(),
+                                             depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
+            m_depthImage->TransitionImageLayout(
+                commandPool, depthFormat, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL, 1);
         }
 
         RenderPass::~RenderPass()
         {
+            delete m_colorImage;
+            delete m_colorImageView;
+
+            delete m_depthImage;
+            delete m_depthImageView;
+
             vkDestroyRenderPass(m_device->GetHandle(), m_renderPass, nullptr);
         }
     } // namespace vulkan
