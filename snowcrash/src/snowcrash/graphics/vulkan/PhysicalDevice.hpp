@@ -51,6 +51,7 @@ namespace SC
             static const ArrayList<const char *> GetRequiredExtensions();
 
             QueueFamilyIndices GetQueueFamilyIndices() { return m_queueFamilyIndices; }
+            const PhysicalDeviceProperties GetDeviceProperties() const { return m_properties; }
 
         public:
             SwapChainSupportDetails QuerySwapChainSupport() { return QuerySwapChainSupport(this->m_physicalDevice); }
@@ -67,6 +68,7 @@ namespace SC
             Instance *m_instance;
             VkPhysicalDevice m_physicalDevice{VK_NULL_HANDLE};
             QueueFamilyIndices m_queueFamilyIndices;
+            PhysicalDeviceProperties m_properties;
         };
     } // namespace vulkan
 }

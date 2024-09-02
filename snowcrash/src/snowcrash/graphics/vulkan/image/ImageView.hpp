@@ -18,6 +18,8 @@ namespace SC
             ImageView(LogicalDevice *m_device, VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, u32 mipLevels = 1);
             ~ImageView();
 
+            VkImageView GetHandle() const { return m_imageView; }
+
         private:
             VkImageView m_imageView;
             LogicalDevice *m_device;
