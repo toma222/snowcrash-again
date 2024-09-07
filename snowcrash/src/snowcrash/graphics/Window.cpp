@@ -20,8 +20,6 @@ namespace SC
 							vidMode->refreshRate};
 		*/
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 		m_window = glfwCreateWindow(m_width, m_height,
 									"Snowcrash Window",

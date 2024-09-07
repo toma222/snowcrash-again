@@ -12,6 +12,7 @@ namespace SC
         {
             VkDescriptorPoolCreateInfo poolInfo{};
             poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+            poolInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
             poolInfo.poolSizeCount = static_cast<uint32_t>(pool.GetIndex());
 
             ArrayList<VkDescriptorPoolSize> descriptorPool;
@@ -26,6 +27,12 @@ namespace SC
                 if (pool[i].second > maxAmount)
                     maxAmount = pool[i].second;
             }
+
+            // TODO integrate this into the abstraction, i am just to lazy to do this now lol
+            // VkDescriptorPoolSize imguiDes;
+            // imguiDes.descriptorCount = 1;
+            // imguiDes.type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            // descriptorPool.Add(imguiDes);
 
             poolInfo.pPoolSizes = descriptorPool.GetArray();
             poolInfo.maxSets = maxAmount;

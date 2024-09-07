@@ -11,7 +11,9 @@ project "Runtime"
 		"%{wks.location}/external/glfw/include",
         "%{wks.location}/external/VulkanMemoryAllocator/include",
         "src",
-        "%{IncludeDir.VulkanSDK}"
+        "%{IncludeDir.VulkanSDK}",
+        "%{wks.location}/external/imgui",
+        "%{wks.location}/external/imgui/backends"
     }
 
     links
@@ -21,7 +23,8 @@ project "Runtime"
         "mingw32",
         "opengl32",
         "gdi32",
-        "%{Library.Vulkan}"
+        "%{Library.Vulkan}",
+        "imgui"
     }
 
     linkoptions

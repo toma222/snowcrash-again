@@ -48,13 +48,31 @@ namespace SC
             count++;
         }
 
-        RenderPipeline::RenderPipeline(Swapchain *swapchain, PhysicalDevice *physicalDevice, LogicalDevice *logicalDevice, const RenderPipelineDef &def)
+        RenderPipeline::RenderPipeline(Swapchain *swapchain, PhysicalDevice *physicalDevice, LogicalDevice *logicalDevice,
+                                       const RenderPipelineDef &def,
+                                       ArrayList<ShaderModule *> &shaderModules, ArrayList<VkPushConstantRange> &pushConstants)
             : m_device(logicalDevice)
         {
-            SC_TRACE("herer");
-            CreateShaderStages(def);
+            for (int i = 0; i < shaderModules.GetIndex(); i++)
+            {
+                VkPipelineShaderStageCreateInfo shaderStageInfo{};
+                shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 
-            // VkPipelineDynamicStateCreateInfo dynamicState = CreateDynamicState();
+                switch (shaderModules[i]->GetShaderType())
+                {
+                case ShaderModule::ShaderType_Fragment:
+                    shaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+                    break;
+
+                case ShaderModule::ShaderType_Vertex:
+                    shaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
+                    break;
+                }
+
+                shaderStageInfo.module = shaderModules[i]->GetHandle();
+                shaderStageInfo.pName = "main";
+                m_shaderStages.Add(shaderStageInfo);
+            }
 
             ArrayList<VkDynamicState> dynamicStates;
             dynamicStates.Add(VK_DYNAMIC_STATE_VIEWPORT);
@@ -65,11 +83,9 @@ namespace SC
             dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.GetIndex());
             dynamicState.pDynamicStates = dynamicStates.GetArray();
 
-            SC_TRACE("herer");
             VkVertexInputBindingDescription bindingDescription = def.vertexDescription->GetBinding();
             auto attributeDescriptions = def.vertexDescription->GetAttributes();
 
-            SC_TRACE("herer");
             VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
             vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
             vertexInputInfo.vertexBindingDescriptionCount = 1;
@@ -158,7 +174,19 @@ namespace SC
             depthStencil.front = {}; // Optional
             depthStencil.back = {};  // Optional
 
-            CreatePipelineLayout(def);
+            VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
+            auto &layouts = def.descriptorSet->GetLayouts();
+
+            pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+            pipelineLayoutInfo.setLayoutCount = layouts.GetIndex();                      // Optional
+            pipelineLayoutInfo.pSetLayouts = def.descriptorSet->GetLayouts().GetArray(); // Optional
+            pipelineLayoutInfo.pushConstantRangeCount = pushConstants.GetIndex();
+            pipelineLayoutInfo.pPushConstantRanges = pushConstants.GetArray();
+
+            if (vkCreatePipelineLayout(m_device->GetHandle(), &pipelineLayoutInfo, nullptr, &m_layout) != VK_SUCCESS)
+            {
+                SC_WARN("failed to create pipeline layout!");
+            }
 
             VkGraphicsPipelineCreateInfo pipelineInfo{};
             pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -178,56 +206,18 @@ namespace SC
             pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
             pipelineInfo.basePipelineIndex = -1;              // Optional
 
-            SC_TRACE("herer");
             if (vkCreateGraphicsPipelines(m_device->GetHandle(), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &m_pipeline) != VK_SUCCESS)
             {
                 SC_WARN("failed to create graphics pipeline!");
             }
-
-            SC_TRACE("herer");
         }
 
         void RenderPipeline::CreatePipelineLayout(const RenderPipelineDef &def)
         {
-            VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
-            auto &layouts = def.descriptorSet->GetLayouts();
-
-            pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-            pipelineLayoutInfo.setLayoutCount = layouts.GetIndex();                      // Optional
-            pipelineLayoutInfo.pSetLayouts = def.descriptorSet->GetLayouts().GetArray(); // Optional
-            pipelineLayoutInfo.pushConstantRangeCount = def.pushConstants.GetIndex();
-            pipelineLayoutInfo.pPushConstantRanges = def.pushConstants.GetArray();
-
-            if (vkCreatePipelineLayout(m_device->GetHandle(), &pipelineLayoutInfo, nullptr, &m_layout) != VK_SUCCESS)
-            {
-                SC_WARN("failed to create pipeline layout!");
-            }
         }
 
         void RenderPipeline::CreateShaderStages(const RenderPipelineDef &def)
         {
-            auto &shaderModules = def.shaderModules;
-
-            for (int i = 0; i < shaderModules.GetIndex(); i++)
-            {
-                VkPipelineShaderStageCreateInfo shaderStageInfo{};
-                shaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-
-                switch (shaderModules[i]->GetShaderType())
-                {
-                case ShaderModule::ShaderType_Fragment:
-                    shaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-                    break;
-
-                case ShaderModule::ShaderType_Vertex:
-                    shaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
-                    break;
-                }
-
-                shaderStageInfo.module = shaderModules[i]->GetHandle();
-                shaderStageInfo.pName = "main";
-                m_shaderStages.Add(shaderStageInfo);
-            }
         }
 
         // ! this dont work no more

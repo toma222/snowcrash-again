@@ -70,14 +70,16 @@ namespace SC
                 Mode mode;
                 Depth depth;
                 RenderPass *renderPass;
-                ArrayList<ShaderModule *> shaderModules;
-                ArrayList<VkPushConstantRange> pushConstants;
+                // ArrayList<ShaderModule *> shaderModules;
+                // ArrayList<VkPushConstantRange> pushConstants;
                 VertexDescription *vertexDescription;
                 DescriptorSet *descriptorSet;
             };
 
         public:
-            RenderPipeline(Swapchain *swapchain, PhysicalDevice *physicalDevice, LogicalDevice *logicalDevice, const RenderPipelineDef &def);
+            RenderPipeline(Swapchain *swapchain, PhysicalDevice *physicalDevice, LogicalDevice *logicalDevice,
+                           const RenderPipelineDef &def,
+                           ArrayList<ShaderModule *> &shaderModules, ArrayList<VkPushConstantRange> &pushConstants);
             ~RenderPipeline();
 
             void BeginRenderPass(VkCommandBuffer buffer, RenderPass *renderPass, VkFramebuffer framebuffer, VkExtent2D extent);

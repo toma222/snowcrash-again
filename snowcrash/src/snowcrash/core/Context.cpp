@@ -14,6 +14,7 @@ namespace SC
         SC_TRACE("Cleaning layer stack");
         for (int i = 0; i < layerStack.GetIndex(); i++)
             delete layerStack[i];
+        SC_TRACE("Done");
     }
 
 }

@@ -1,0 +1,27 @@
+
+#pragma once
+
+#include <snowcrash/graphics/subrenderer/Subrender.hpp>
+
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
+
+namespace SC
+{
+    class ImGuiSubrender : public Subrender
+    {
+    public:
+        ImGuiSubrender(GraphicsLayer *layer);
+        ~ImGuiSubrender();
+
+        void Init() override;
+        void Render(VkCommandBuffer buffer) override;
+        void RecreateSwapchain() override;
+
+    private:
+        void CreateImGuiRenderPass();
+
+    private:
+        VkRenderPass m_imguiRenderPass;
+    };
+} // namespace SC

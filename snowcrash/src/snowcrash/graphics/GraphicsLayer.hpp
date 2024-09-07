@@ -22,6 +22,9 @@
 
 namespace SC
 {
+	class ImGuiSubrender;
+	class Subrender;
+
 	struct UniformBufferData
 	{
 		glm::mat4 model;
@@ -39,6 +42,15 @@ namespace SC
 
 		void Init() override;
 		void Update() override;
+
+		template <class S>
+		void AddSubrender()
+		{
+			m_subrenders.Add(dynamic_cast<Subrender *>(new S(this)));
+		}
+
+		void InitSubrenders();
+		void CleanSubrenders();
 
 	private:
 		vulkan::Instance *m_instance;
@@ -69,6 +81,10 @@ namespace SC
 		vulkan::Semaphore *m_renderFinishedSemaphore;
 
 		Window *m_window;
+
+		ArrayList<Subrender *> m_subrenders;
+
+		friend ImGuiSubrender;
 	};
 
 }

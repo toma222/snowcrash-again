@@ -27,6 +27,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 group "External"
     include "external/glfw"
+    include "external/imgui"
 group ""
 
 group "Tools"

@@ -90,8 +90,6 @@ namespace SC
                 SC_WARN("failed to create render pass!");
             }
 
-            CreateRenderPassResources(physicalDevice, m_device, swapchain, pool);
-
             CreateFramebuffers();
         }
 
@@ -110,6 +108,7 @@ namespace SC
 
             m_framebuffers.SetIndex(0);
         }
+
         void RenderPass::CreateFramebuffers()
         {
             CreateRenderPassResources(m_physicalDevice, m_device, m_swapchain, m_commandPool);
@@ -168,6 +167,11 @@ namespace SC
 
         RenderPass::~RenderPass()
         {
+            for (int i = 0; i < m_framebuffers.GetIndex(); i++)
+            {
+                delete m_framebuffers[i];
+            }
+
             delete m_colorImage;
             delete m_colorImageView;
 

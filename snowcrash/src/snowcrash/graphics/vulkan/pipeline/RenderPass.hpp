@@ -27,6 +27,7 @@ namespace SC
 
             VkRenderPass GetHandle() const { return m_renderPass; }
 
+            // ! this creates the render pass resources with it
             Framebuffer *GetFramebuffer(int i) const { return m_framebuffers[i]; }
 
         private:

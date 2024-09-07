@@ -3,6 +3,7 @@
 #include "snowcrash/graphics/GraphicsLayer.hpp"
 
 #include <snowcrash/application/Application.hpp>
+#include <snowcrash/graphics/subrenderer/ImGuiSubrender.hpp>
 
 namespace runtime
 {
@@ -13,7 +14,9 @@ namespace runtime
 
     void RuntimeApplication::Init()
     {
-        m_context->AddLayer(new snowcrash::GraphicsLayer(m_context, m_window));
+        snowcrash::GraphicsLayer *gl = new snowcrash::GraphicsLayer(m_context, m_window);
+        gl->AddSubrender<SC::ImGuiSubrender>();
+        m_context->AddLayer(gl);
 
         return;
     }

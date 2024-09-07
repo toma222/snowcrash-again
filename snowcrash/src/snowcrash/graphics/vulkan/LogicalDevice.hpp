@@ -19,9 +19,10 @@ namespace SC
             LogicalDevice(PhysicalDevice *physicalDevice);
             ~LogicalDevice();
 
-            VkDevice GetHandle() { return m_device; }
-            VkQueue GetGraphicsQueue() { return m_graphicsQueue; }
-            VkQueue GetPresentQueue() { return m_presentQueue; }
+            VkDevice GetHandle() const { return m_device; }
+            VkQueue GetGraphicsQueue() const { return m_graphicsQueue; }
+            VkQueue GetPresentQueue() const { return m_presentQueue; }
+            u32 GetGraphicsQueueFamily() const { return m_graphicsFamily; };
 
             // This stalls the main thread until everything is done
             void DeviceWaitIdle() const;
@@ -30,6 +31,9 @@ namespace SC
             VkDevice m_device;
             VkQueue m_graphicsQueue;
             VkQueue m_presentQueue;
+
+            // TODO we can do better
+            u32 m_graphicsFamily;
         };
     } // namespace vulkan
 }

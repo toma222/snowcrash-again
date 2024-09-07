@@ -19,7 +19,8 @@ namespace SC
             ArrayList<uint32_t> uniqueQueueFamilies;
             uniqueQueueFamilies.Add(physicalDevice->GetQueueFamilyIndices().graphicsFamily.value());
             uniqueQueueFamilies.Add(physicalDevice->GetQueueFamilyIndices().presentFamily.value());
-            // std::set<uint32_t> uniqueQueueFamilies = {m_queueFamilyIndices.graphicsFamily.value(), m_queueFamilyIndices.presentFamily.value()};
+
+            m_graphicsFamily = physicalDevice->GetQueueFamilyIndices().graphicsFamily.value();
 
             float queuePriority = 1.0f;
             for (int i = 0; i < uniqueQueueFamilies.GetIndex(); i++)

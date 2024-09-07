@@ -19,7 +19,9 @@ project "snowcrash"
 		"%{wks.location}/external/glfw/include",
         "%{wks.location}/external/glm",
         "%{wks.location}/external/VulkanMemoryAllocator/include",
-        "%{IncludeDir.VulkanSDK}"
+        "%{IncludeDir.VulkanSDK}",
+        "%{wks.location}/external/imgui",
+        "%{wks.location}/external/imgui/backends"
     }
 
 	links
@@ -28,7 +30,8 @@ project "snowcrash"
         "%{Library.Vulkan}",
         "mingw32",
         "opengl32",
-        "gdi32"
+        "gdi32",
+        "imgui"
     }
 
     linkoptions

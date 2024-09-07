@@ -7,6 +7,8 @@
 
 #include <snowcrash/graphics/vulkan/descriptors/Descriptor.hpp>
 
+#include <snowcrash/graphics/subrenderer/ImGuiSubrender.hpp>
+
 namespace SC
 {
 
@@ -18,7 +20,10 @@ namespace SC
 	GraphicsLayer::~GraphicsLayer()
 	{
 		SC_TRACE("Clean graphics layer");
+
 		m_logicalDevice->DeviceWaitIdle();
+
+		CleanSubrenders();
 
 		delete m_fence;
 		delete m_imageAvailableSemaphore;
@@ -72,8 +77,8 @@ namespace SC
 		m_vertexDescription->Add(vulkan::VertexDescription::Type_vec3);
 
 		ArrayList<DescriptorPool::DescriptorBinding> poolBindings;
-		poolBindings.Add(DescriptorPool::DescriptorBinding{Descriptor::DescriptorType::DescriptorType_Uniform, 1});
-		poolBindings.Add(DescriptorPool::DescriptorBinding{Descriptor::DescriptorType::DescriptorType_TextureSampler, 1});
+		poolBindings.Add(DescriptorPool::DescriptorBinding{Descriptor::DescriptorType::DescriptorType_Uniform, 10});
+		poolBindings.Add(DescriptorPool::DescriptorBinding{Descriptor::DescriptorType::DescriptorType_TextureSampler, 10});
 		m_descriptorPool = new vulkan::DescriptorPool(m_logicalDevice, poolBindings);
 
 		m_uniformBuffer = new UniformBuffer(m_physicalDevice, m_logicalDevice, m_commandPool, sizeof(UniformBufferData));
@@ -95,27 +100,42 @@ namespace SC
 		m_descriptorSet = new DescriptorSet(m_physicalDevice, m_logicalDevice, m_descriptorPool, m_layout, 1);
 		// delete layout;
 
-		ArrayList<VkPushConstantRange> *pushConstants = new ArrayList<VkPushConstantRange>();
+		ArrayList<VkPushConstantRange> pushConstants = ArrayList<VkPushConstantRange>();
 		VkPushConstantRange pushConstant;
 		pushConstant.size = sizeof(float) * 4 * 4;
 		pushConstant.offset = 0;
 		pushConstant.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-		pushConstants->Add(pushConstant);
+		pushConstants.Add(pushConstant);
 
 		m_pipeline = new vulkan::RenderPipeline(m_swapchain, m_physicalDevice, m_logicalDevice,
 												vulkan::RenderPipeline::RenderPipelineDef{vulkan::RenderPipeline::Mode_Polygon,
 																						  vulkan::RenderPipeline::Depth_ReadWrite,
 																						  m_renderPass,
-																						  m_shaderModules,
-																						  *pushConstants,
 																						  m_vertexDescription,
-																						  m_descriptorSet});
-		SC_TRACE("making fencies");
+																						  m_descriptorSet},
+												m_shaderModules, pushConstants);
+
 		m_fence = new Fence(m_logicalDevice);
 		m_imageAvailableSemaphore = new Semaphore(m_logicalDevice);
 		m_renderFinishedSemaphore = new Semaphore(m_logicalDevice);
 
-		SC_TRACE("making fencies");
+		InitSubrenders();
+	}
+
+	void GraphicsLayer::InitSubrenders()
+	{
+		for (int i = 0; i < m_subrenders.GetIndex(); i++)
+		{
+			m_subrenders[i]->Init();
+		}
+	}
+
+	void GraphicsLayer::CleanSubrenders()
+	{
+		for (int i = 0; i < m_subrenders.GetIndex(); i++)
+		{
+			delete m_subrenders[i];
+		}
 	}
 
 	void GraphicsLayer::Update()
@@ -139,16 +159,16 @@ namespace SC
 		}
 
 		// DRAW SHIT HERE
-		// RenderFrameData d;
-		// d.swapchainImage = imageIndex;
-		// d.renderExtent = m_swapchain->GetSwapchainExtent();
-		// m_pipeline->GetDrawCommands(m_commandPool->GetBuffer(m_currentFrame), d);
-		// RecordCommandBuffer(m_commandPool->GetBuffer(m_currentFrame), imageIndex);
 
 		m_pipeline->BeginRenderPass(buffer, m_renderPass, m_renderPass->GetFramebuffer(imageIndex)->GetHandle(), m_swapchain->GetSwapchainExtent());
 		m_pipeline->SetViewport(buffer, m_swapchain->GetSwapchainExtent().width, m_swapchain->GetSwapchainExtent().height);
 		m_pipeline->SetScissor(buffer, m_swapchain->GetSwapchainExtent());
-		//
+
+		for (int i = 0; i < m_subrenders.GetIndex(); i++)
+		{
+			m_subrenders[i]->Render(buffer);
+		}
+
 		m_pipeline->EndRenderPass(buffer);
 
 		if (vkEndCommandBuffer(buffer) != VK_SUCCESS)
