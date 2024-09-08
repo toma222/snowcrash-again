@@ -16,6 +16,8 @@
 
 #include <imgui/imgui.h>
 
+#include <snowcrash/debug/Debug.hpp>
+
 namespace SC
 {
 	struct PushConstant
@@ -166,11 +168,16 @@ namespace SC
 
 	void GraphicsLayer::Update()
 	{
+		Timer frameTimer("frameTimer", 0, false);
+
 		// Profit
+		Timer getNextImageTimer("next image", 0, false);
 		m_fence->WaitForFence();
 		uint32_t imageIndex = m_swapchain->AcquireNextImage(m_imageAvailableSemaphore);
 		m_fence->ResetFence();
+		getNextImageTimer.EndTimer();
 
+		Timer fillCommandBufferTimer("fill command buffer", 0, false);
 		vkResetCommandBuffer(m_commandPool->GetCommandBuffer(0), 0);
 
 		VkCommandBuffer buffer = m_commandPool->GetCommandBuffer(0);
@@ -215,8 +222,11 @@ namespace SC
 			assert("failed to record command buffer!");
 		}
 
+		fillCommandBufferTimer.EndTimer();
+
 		// STOP DRAWING STUFF
 
+		Timer presentTimer("present timer", 0, false);
 		VkSubmitInfo submitInfo{};
 		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 		VkSemaphore waitSemaphores[] = {m_imageAvailableSemaphore->GetHandle()};
@@ -267,6 +277,14 @@ namespace SC
 		{
 			SC_ERROR("failed to present swap chain image!");
 		}
+
+		presentTimer.EndTimer();
+		frameTimer.EndTimer();
+
+		m_prevFrameDebugTimer.totalFrameTime = frameTimer.GetMicroseconds() / 1000;
+		m_prevFrameDebugTimer.getSwapchainImage = getNextImageTimer.GetMicroseconds() / 1000;
+		m_prevFrameDebugTimer.presentImage = presentTimer.GetMicroseconds() / 1000;
+		m_prevFrameDebugTimer.fillCommandBuffer = fillCommandBufferTimer.GetMicroseconds() / 1000;
 	}
 
 	void GraphicsLayer::DrawGuiFrame()
@@ -297,6 +315,11 @@ namespace SC
 		default:
 			break;
 		}
-		//
+
+		ImGui::Separator();
+		ImGui::Text("total frame time: %.2f (ms)", m_prevFrameDebugTimer.totalFrameTime);
+		ImGui::Text("get next image: %.2f (ms)", m_prevFrameDebugTimer.getSwapchainImage);
+		ImGui::Text("fill command buffer: %.2f (ms)", m_prevFrameDebugTimer.fillCommandBuffer);
+		ImGui::Text("draw and present image: %.2f (ms)", m_prevFrameDebugTimer.presentImage);
 	}
 }

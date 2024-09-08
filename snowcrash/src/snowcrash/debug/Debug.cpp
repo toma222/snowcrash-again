@@ -24,7 +24,7 @@ namespace SC
         file.open(path.c_str());
         profileCount = 0;
         WriteHeader();
-        fileStartTime = std::chrono::system_clock::now();
+        fileStartTime = std::chrono::high_resolution_clock::now();
 
         // mutex.unlock();
     }
@@ -81,10 +81,10 @@ namespace SC
         // mutex.unlock();
     }
 
-    Timer::Timer(std::string name, size_t threadID)
+    Timer::Timer(std::string name, size_t threadID, bool writeToFile)
         : programName(name),
           start(std::chrono::high_resolution_clock::now()),
-          m_threadID(threadID) {}
+          m_threadID(threadID), m_write(writeToFile) {}
 
     void Timer::EndTimer()
     {
@@ -97,9 +97,12 @@ namespace SC
         if (running)
             EndTimer();
 
-        Instrumentor::Get().WriteDebugFrame({std::chrono::duration<float, std::chrono::microseconds::period>(end - start).count(),
-                                             m_threadID,
-                                             start,
-                                             programName});
+        if (m_write)
+        {
+            Instrumentor::Get().WriteDebugFrame({std::chrono::duration<float, std::chrono::microseconds::period>(end - start).count(),
+                                                 m_threadID,
+                                                 start,
+                                                 programName});
+        }
     }
 }

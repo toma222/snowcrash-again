@@ -6,9 +6,11 @@
 #include <fstream>
 #include <mutex>
 #include <optional>
+#include <chrono>
 
 namespace SC
 {
+    // this might give errors, but it works lol
     using timePoint = std::chrono::time_point<std::chrono::_V2::system_clock, std::chrono::_V2::system_clock::duration>;
 
     struct DebugFrame
@@ -49,8 +51,9 @@ namespace SC
     struct Timer
     {
     public:
-        Timer(std::string name, size_t threadID = 0);
+        Timer(std::string name, size_t threadID = 0, bool writeToFile = true);
         void EndTimer();
+        float GetMicroseconds() { return std::chrono::duration<float, std::chrono::microseconds::period>(end - start).count(); };
         ~Timer();
 
     private:
@@ -59,6 +62,7 @@ namespace SC
         timePoint end;
         bool running{true};
         size_t m_threadID;
+        const bool m_write;
     };
 }
 

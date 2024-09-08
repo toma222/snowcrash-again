@@ -35,6 +35,16 @@ namespace SC
 		glm::mat4 projection;
 	};
 
+	// This is for debug info
+	struct DebugTimers
+	{
+		float totalFrameTime;
+		float presentImage;
+		float getSwapchainImage;
+		float fillCommandBuffer;
+	};
+
+	// TODO add a mode to remove the timers
 	class GraphicsLayer : public Layer
 	{
 		SC_OBJECT(GraphicsLayer, Layer)
@@ -95,6 +105,9 @@ namespace SC
 		ArrayList<Subrender *> m_subrenders;
 
 		friend ImGuiSubrender;
+
+	private:
+		DebugTimers m_prevFrameDebugTimer;
 	};
 
 }
