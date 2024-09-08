@@ -22,6 +22,7 @@ namespace SC
         void CreateImGuiRenderPass();
 
     private:
+        // ! we dont use this anymore, but we might???
         VkRenderPass m_imguiRenderPass;
     };
 } // namespace SC

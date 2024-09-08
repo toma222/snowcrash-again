@@ -47,9 +47,11 @@ namespace SC
 		void Update() override;
 
 		template <class S>
-		void AddSubrender()
+		auto *AddSubrender()
 		{
-			m_subrenders.Add(dynamic_cast<Subrender *>(new S(this)));
+			auto *s = dynamic_cast<Subrender *>(new S(this));
+			m_subrenders.Add(s);
+			return s;
 		}
 
 		void InitSubrenders();

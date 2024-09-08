@@ -15,7 +15,7 @@ namespace runtime
     void RuntimeApplication::Init()
     {
         snowcrash::GraphicsLayer *gl = new snowcrash::GraphicsLayer(m_context, m_window);
-        // gl->AddSubrender<SC::ImGuiSubrender>();
+        gl->AddSubrender<SC::ImGuiSubrender>();
         m_context->AddLayer(gl);
 
         return;

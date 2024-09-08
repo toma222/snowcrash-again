@@ -201,10 +201,10 @@ namespace SC
 
 		m_pipeline->DrawIndexed(buffer, m_indexBuffer->GetIndiciesCount());
 
-		// for (int i = 0; i < m_subrenders.GetIndex(); i++)
-		// {
-		// 	m_subrenders[i]->Render(buffer);
-		// }
+		for (int i = 0; i < m_subrenders.GetIndex(); i++)
+		{
+			m_subrenders[i]->Render(buffer);
+		}
 
 		m_pipeline->EndRenderPass(buffer);
 

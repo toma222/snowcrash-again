@@ -29,6 +29,20 @@ namespace SC
 		}
 
 		template <typename T>
+		const T *GetLayer()
+		{
+			for (int i = 0; i < layerStack.GetIndex(); i++)
+			{
+				if (layerStack[i]->GetHash() == T::GetStaticTypeInfo()->hash)
+				{
+					return layerStack[i];
+				}
+			}
+
+			return nullptr;
+		}
+
+		template <typename T>
 		inline void SubscribeEvent(const EventHandler<T> &callback)
 		{
 			SC_TRACE("subscribe event");

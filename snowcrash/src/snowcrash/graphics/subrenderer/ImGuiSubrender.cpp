@@ -121,6 +121,8 @@ namespace SC
 
         ImGui::ShowDemoWindow();
 
+        RenderPasses(buffer);
+
         ImGui::Render();
         ImDrawData *main_draw_data = ImGui::GetDrawData();
         ImGui_ImplVulkan_RenderDrawData(main_draw_data, buffer);

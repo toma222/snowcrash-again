@@ -15,7 +15,7 @@ namespace SC
     //      The editor layer
     //      The audio layer
     //
-    // Layer holds logic for recieving events
+    // Layer holds logic for receiving events
     // Layer has an update function
 
     class Layer : public Object
