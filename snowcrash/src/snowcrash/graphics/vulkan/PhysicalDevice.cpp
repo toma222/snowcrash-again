@@ -59,10 +59,10 @@ namespace SC
             VkPhysicalDeviceFeatures supportedFeatures;
             vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
 
-            VkPhysicalDeviceProperties physicalDeviceProperties;
-            vkGetPhysicalDeviceProperties(device, &physicalDeviceProperties);
+            // VkPhysicalDeviceProperties physicalDeviceProperties;
+            vkGetPhysicalDeviceProperties(device, &m_vulkanDeviceProperties);
 
-            SC_TRACE("Physical Device Option [%s]", physicalDeviceProperties.deviceName);
+            SC_TRACE("Physical Device Option [%s]", m_vulkanDeviceProperties.deviceName);
 
             return m_queueFamilyIndices.isComplete() && extensionsSupported && swapChainAdequate && supportedFeatures.samplerAnisotropy;
         }

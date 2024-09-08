@@ -29,6 +29,9 @@ namespace SC
         virtual void Init() = 0;
         virtual void Update() = 0;
 
+        // This function is used by the editor application to draw the layers debug information
+        virtual void DrawGuiFrame() {};
+
         bool GetActive() const { return m_active; }
         void SetActive(bool v) { m_active = v; }
 

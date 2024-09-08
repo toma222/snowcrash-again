@@ -25,6 +25,7 @@ namespace SC
             VkFormat GetSwapchainFormat() const { return m_swapChainImageFormat; }
             VkExtent2D GetSwapchainExtent() const { return m_swapChainExtent; }
             ArrayList<ImageView *> &GetSwapchainImageViews() { return m_swapchainViews; }
+            VkPresentModeKHR GetPresentMode() const { return m_presentMode; }
 
             VkSwapchainKHR GetHandle() const { return m_swapchain; }
 
@@ -50,6 +51,7 @@ namespace SC
 
             VkFormat m_swapChainImageFormat{};
             VkExtent2D m_swapChainExtent{};
+            VkPresentModeKHR m_presentMode;
         };
     } // namespace vulkan
 }

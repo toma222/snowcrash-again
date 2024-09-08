@@ -85,7 +85,7 @@ namespace SC
             SwapChainSupportDetails swapChainSupport = physicalDevice->QuerySwapChainSupport();
 
             VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
-            VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes); // VK_PRESENT_MODE_IMMEDIATE_KHR; //
+            m_presentMode = chooseSwapPresentMode(swapChainSupport.presentModes); // VK_PRESENT_MODE_IMMEDIATE_KHR; //
             VkExtent2D extent = chooseSwapExtent(swapChainSupport.capabilities, m_window);
             uint32_t imageCount = swapChainSupport.capabilities.minImageCount + 1; // :3
 
@@ -128,7 +128,7 @@ namespace SC
 
             createInfo.preTransform = swapChainSupport.capabilities.currentTransform;
             createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-            createInfo.presentMode = presentMode;
+            createInfo.presentMode = m_presentMode;
             createInfo.clipped = VK_TRUE;
             createInfo.oldSwapchain = VK_NULL_HANDLE;
 

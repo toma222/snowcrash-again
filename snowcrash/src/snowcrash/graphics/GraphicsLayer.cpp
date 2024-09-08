@@ -14,6 +14,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <imgui/imgui.h>
+
 namespace SC
 {
 	struct PushConstant
@@ -265,5 +267,36 @@ namespace SC
 		{
 			SC_ERROR("failed to present swap chain image!");
 		}
+	}
+
+	void GraphicsLayer::DrawGuiFrame()
+	{
+		ImGui::SeparatorText("Debug info");
+		ImGui::Text("Device name: %s", m_physicalDevice->GetVulkanDeviceProperties().deviceName);
+		ImGui::Text("MSSA samples: %u", (u32)(m_physicalDevice->GetDeviceProperties().mssaSamples));
+
+		ImGui::Separator();
+		VkExtent2D se = m_swapchain->GetSwapchainExtent();
+		ImGui::Text("Swapchain extent: [%u, %u]", se.width, se.height);
+		ImGui::Text("Swapchain images: %u", m_swapchain->GetSwapchainImageViews().GetIndex());
+
+		switch (m_swapchain->GetPresentMode())
+		{
+		case VK_PRESENT_MODE_FIFO_KHR:
+			ImGui::Text("Swapchain present mode: FIFO");
+			break;
+		case VK_PRESENT_MODE_FIFO_RELAXED_KHR:
+			ImGui::Text("Swapchain present mode: Relaxed FIFO");
+			break;
+		case VK_PRESENT_MODE_MAILBOX_KHR:
+			ImGui::Text("Swapchain present mode: Mailbox");
+			break;
+		case VK_PRESENT_MODE_IMMEDIATE_KHR:
+			ImGui::Text("Swapchain present mode: Immediate");
+			break;
+		default:
+			break;
+		}
+		//
 	}
 }

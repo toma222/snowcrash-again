@@ -46,6 +46,8 @@ namespace SC
 		void Init() override;
 		void Update() override;
 
+		void DrawGuiFrame() override;
+
 		template <class S>
 		auto *AddSubrender()
 		{

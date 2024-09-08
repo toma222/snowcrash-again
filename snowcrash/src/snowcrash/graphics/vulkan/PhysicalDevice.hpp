@@ -40,6 +40,7 @@ namespace SC
             char *deviceName;
         };
 
+        // TODO stop using the wrong function with the wacky wrapper class and switch to just using the vulkan device properties
         class PhysicalDevice
         {
         public:
@@ -52,6 +53,9 @@ namespace SC
 
             QueueFamilyIndices GetQueueFamilyIndices() { return m_queueFamilyIndices; }
             const PhysicalDeviceProperties GetDeviceProperties() const { return m_properties; }
+
+            // This is the one you should use
+            const VkPhysicalDeviceProperties &GetVulkanDeviceProperties() const { return m_vulkanDeviceProperties; }
 
         public:
             SwapChainSupportDetails QuerySwapChainSupport() { return QuerySwapChainSupport(this->m_physicalDevice); }
@@ -70,6 +74,7 @@ namespace SC
             VkPhysicalDevice m_physicalDevice{VK_NULL_HANDLE};
             QueueFamilyIndices m_queueFamilyIndices;
             PhysicalDeviceProperties m_properties;
+            VkPhysicalDeviceProperties m_vulkanDeviceProperties; // this is what we should be using lol
         };
     } // namespace vulkan
 }
