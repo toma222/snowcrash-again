@@ -4,18 +4,25 @@
 
 #include <snowcrash/resource/ResourceRawFile.hpp>
 #include <snowcrash/resource/ResourceImage.hpp>
+#include <snowcrash/resource/ResourceModel.hpp>
 
 #include <snowcrash/graphics/vulkan/descriptors/Descriptor.hpp>
 
 #include <snowcrash/graphics/subrenderer/ImGuiSubrender.hpp>
 
+#include <chrono>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 namespace SC
 {
+	struct PushConstant
+	{
+		glm::mat4 model;
+	};
 
 	GraphicsLayer::GraphicsLayer(Context *context, Window *window)
-		: Layer(context), m_window(window)
-	{
-	}
+		: Layer(context), m_window(window) {}
 
 	GraphicsLayer::~GraphicsLayer()
 	{
@@ -24,6 +31,9 @@ namespace SC
 		m_logicalDevice->DeviceWaitIdle();
 
 		CleanSubrenders();
+
+		delete m_indexBuffer;
+		delete m_vertexBuffer;
 
 		delete m_fence;
 		delete m_imageAvailableSemaphore;
@@ -76,6 +86,13 @@ namespace SC
 		m_vertexDescription->Add(vulkan::VertexDescription::Type_vec2);
 		m_vertexDescription->Add(vulkan::VertexDescription::Type_vec3);
 
+		const ResourceModel *model = GetResource<ResourceModel>("viking_room.obj");
+		m_indexBuffer = new IndexBuffer(m_physicalDevice, m_logicalDevice,
+										m_commandPool, model->GetModel()->m_indicies.GetArray(), model->GetModel()->m_indicies.GetIndex() * sizeof(u32));
+
+		m_vertexBuffer = new VertexBuffer(m_physicalDevice, m_logicalDevice,
+										  m_commandPool, model->GetModel()->m_vertices.GetArray(), model->GetModel()->m_vertices.GetIndex() * sizeof(ModelVertex));
+
 		ArrayList<DescriptorPool::DescriptorBinding> poolBindings;
 		poolBindings.Add(DescriptorPool::DescriptorBinding{Descriptor::DescriptorType::DescriptorType_Uniform, 10});
 		poolBindings.Add(DescriptorPool::DescriptorBinding{Descriptor::DescriptorType::DescriptorType_TextureSampler, 10});
@@ -83,7 +100,14 @@ namespace SC
 
 		m_uniformBuffer = new UniformBuffer(m_physicalDevice, m_logicalDevice, m_commandPool, sizeof(UniformBufferData));
 
-		const ResourceImage *image = GetResource<ResourceImage>("512X512.png");
+		UniformBufferData ubo;
+		ubo.model = glm::mat4(1.0f);
+		ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		ubo.projection = glm::perspective(glm::radians(45.0f), m_swapchain->GetSwapchainExtent().width / (float)m_swapchain->GetSwapchainExtent().height, 0.1f, 10.0f);
+		ubo.projection[1][1] *= -1;
+		m_uniformBuffer->CopyDataToBuffer(&ubo, sizeof(ubo));
+
+		const ResourceImage *image = GetResource<ResourceImage>("viking_room.png");
 		m_textureImage = new TextureImage2D(m_physicalDevice, m_logicalDevice, m_commandPool, image->GetImage(),
 											TextureData{
 												image->GetWidth(),
@@ -161,13 +185,26 @@ namespace SC
 		// DRAW SHIT HERE
 
 		m_pipeline->BeginRenderPass(buffer, m_renderPass, m_renderPass->GetFramebuffer(imageIndex)->GetHandle(), m_swapchain->GetSwapchainExtent());
+		m_vertexBuffer->Bind(buffer);
+		m_indexBuffer->Bind(buffer);
+		m_pipeline->BindPipeline(buffer);
+
 		m_pipeline->SetViewport(buffer, m_swapchain->GetSwapchainExtent().width, m_swapchain->GetSwapchainExtent().height);
 		m_pipeline->SetScissor(buffer, m_swapchain->GetSwapchainExtent());
 
-		for (int i = 0; i < m_subrenders.GetIndex(); i++)
-		{
-			m_subrenders[i]->Render(buffer);
-		}
+		PushConstant c;
+		static auto startTime = std::chrono::high_resolution_clock::now();
+		auto currentTime = std::chrono::high_resolution_clock::now();
+		float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+		c.model = glm::rotate(glm::mat4(1.0f), time * glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+		m_pipeline->BindPushConstant<PushConstant>(buffer, VK_SHADER_STAGE_VERTEX_BIT, &c);
+
+		m_pipeline->DrawIndexed(buffer, m_indexBuffer->GetIndiciesCount());
+
+		// for (int i = 0; i < m_subrenders.GetIndex(); i++)
+		// {
+		// 	m_subrenders[i]->Render(buffer);
+		// }
 
 		m_pipeline->EndRenderPass(buffer);
 
@@ -215,6 +252,14 @@ namespace SC
 			m_swapchain->RecreateSwapchain();
 			m_renderPass->DestroyFramebuffers();
 			m_renderPass->CreateFramebuffers();
+
+			// Recalculate camera
+			UniformBufferData ubo;
+			ubo.model = glm::mat4(1.0f);
+			ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+			ubo.projection = glm::perspective(glm::radians(45.0f), m_swapchain->GetSwapchainExtent().width / (float)m_swapchain->GetSwapchainExtent().height, 0.1f, 10.0f);
+			ubo.projection[1][1] *= -1;
+			m_uniformBuffer->CopyDataToBuffer(&ubo, sizeof(ubo));
 		}
 		else if (presentResult != VK_SUCCESS)
 		{

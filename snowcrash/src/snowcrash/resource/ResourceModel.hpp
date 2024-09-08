@@ -14,7 +14,7 @@ namespace SC
         ResourceModel(u32 hash, Model *model);
         ~ResourceModel();
 
-        const Model *GetModel() { return m_model; }
+        const Model *GetModel() const { return m_model; }
 
     private:
         const Model *m_model;

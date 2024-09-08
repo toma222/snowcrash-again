@@ -73,8 +73,13 @@ namespace SC
         ImGuiIO &io = ImGui::GetIO();
         (void)io;
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
         // io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
         // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+        // Path p = m_graphicsLayer->m_context->currentProject.projectPath += "systems/Graphics/fonts/Firacode-Light.ttf";
+        Path p = m_graphicsLayer->m_context->currentProject.projectPath += "systems/Graphics/fonts/PixelifySans-VariableFont_wght.ttf";
+        io.Fonts->AddFontFromFileTTF(p.GetString().c_str(), 16);
 
         // Setup Dear ImGui style
         ImGui::StyleColorsDark();

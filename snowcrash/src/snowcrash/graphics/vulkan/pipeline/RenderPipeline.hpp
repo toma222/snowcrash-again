@@ -82,7 +82,10 @@ namespace SC
                            ArrayList<ShaderModule *> &shaderModules, ArrayList<VkPushConstantRange> &pushConstants);
             ~RenderPipeline();
 
+            // ! This should low-key be in its own class lol
             void BeginRenderPass(VkCommandBuffer buffer, RenderPass *renderPass, VkFramebuffer framebuffer, VkExtent2D extent);
+
+            // this function will also bind the descriptor sets for the pipeline
             void BindPipeline(VkCommandBuffer buffer);
             void EndRenderPass(VkCommandBuffer buffer);
 
@@ -104,6 +107,8 @@ namespace SC
 
         private:
             LogicalDevice *m_device;
+
+            DescriptorSet *m_descriptorSet;
 
             VkPipeline m_pipeline;
             VkPipelineLayout m_layout;

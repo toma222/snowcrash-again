@@ -51,7 +51,7 @@ namespace SC
         RenderPipeline::RenderPipeline(Swapchain *swapchain, PhysicalDevice *physicalDevice, LogicalDevice *logicalDevice,
                                        const RenderPipelineDef &def,
                                        ArrayList<ShaderModule *> &shaderModules, ArrayList<VkPushConstantRange> &pushConstants)
-            : m_device(logicalDevice)
+            : m_device(logicalDevice), m_descriptorSet(def.descriptorSet)
         {
             for (int i = 0; i < shaderModules.GetIndex(); i++)
             {
@@ -256,10 +256,15 @@ namespace SC
 
             vkCmdBeginRenderPass(buffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
         }
+
         void RenderPipeline::BindPipeline(VkCommandBuffer buffer)
         {
             vkCmdBindPipeline(buffer, VK_PIPELINE_BIND_POINT_GRAPHICS, m_pipeline);
+
+            vkCmdBindDescriptorSets(buffer,
+                                    VK_PIPELINE_BIND_POINT_GRAPHICS, m_layout, 0, 1, &m_descriptorSet->GetDescriptorSets()[0], 0, nullptr);
         }
+
         void RenderPipeline::EndRenderPass(VkCommandBuffer buffer)
         {
             vkCmdEndRenderPass(buffer);

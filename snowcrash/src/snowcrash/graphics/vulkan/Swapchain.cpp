@@ -18,7 +18,7 @@ namespace SC
             // for (const auto &availableFormat : availableFormats)
             for (int i = 0; i < availableFormats.GetIndex(); i++)
             {
-                if (availableFormats[i].format == VK_FORMAT_B8G8R8A8_SRGB &&
+                if (availableFormats[i].format == VK_FORMAT_B8G8R8A8_UNORM &&
                     availableFormats[i].colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
                 {
                     return availableFormats[i];

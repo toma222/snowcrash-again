@@ -18,6 +18,9 @@
 #include <snowcrash/graphics/vulkan/sync/Fence.hpp>
 #include <snowcrash/graphics/vulkan/sync/Semaphore.hpp>
 
+#include <snowcrash/graphics/vulkan/buffer/IndexBuffer.hpp>
+#include <snowcrash/graphics/vulkan/buffer/VertexBuffer.hpp>
+
 #include <glm/glm.hpp>
 
 namespace SC
@@ -73,6 +76,9 @@ namespace SC
 		vulkan::TextureImage2D *m_textureImage;
 
 		vulkan::DescriptorLayout *m_layout;
+
+		vulkan::IndexBuffer *m_indexBuffer;
+		vulkan::VertexBuffer *m_vertexBuffer;
 
 		ArrayList<vulkan::ShaderModule *> m_shaderModules;
 
