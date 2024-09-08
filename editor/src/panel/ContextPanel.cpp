@@ -43,6 +43,24 @@ namespace editor
             }
         }
 
+        ImGui::SeparatorText("Resources");
+
+        ImGui::Text("Loaded resources");
+
+        auto &loadedResources = m_context->resourceArray.GetLoadedResourcePaths();
+        for (int i = 0; i < loadedResources.GetIndex(); i++)
+        {
+            ImGui::Text(loadedResources[i].c_str());
+        }
+
+        ImGui::SeparatorText("Events");
+
+        auto &eventListeners = m_context->eventManager.GetEventInterfaceArray();
+        for (int i = 0; i < eventListeners.GetIndex(); i++)
+        {
+            ImGui::Text("%s [id:%u]", eventListeners[i]->GetClassName().c_str(), eventListeners[i]->GetEventHash());
+        }
+
         ImGui::End();
     }
 } // namespace editor

@@ -43,6 +43,8 @@ namespace SC
                                          entry.second.Substring(sl, size));
             }
 
+            m_loadedResourcesStrings.Add(entry.second);
+
             delete entry.first;
         }
     }

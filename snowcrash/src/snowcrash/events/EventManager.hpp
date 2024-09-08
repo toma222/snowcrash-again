@@ -34,6 +34,7 @@ public:                                                                     \
     public:
         void Execute(const Event &event) { Call(event); }
         virtual u32 GetEventHash() const = 0;
+        virtual const String GetClassName() const = 0;
 
         virtual ~EventHandlerInterface() = default;
 
@@ -45,12 +46,13 @@ public:                                                                     \
     class EventHandlerWrapper : public EventHandlerInterface
     {
     public:
-        EventHandlerWrapper(const EventHandler<T> &handler)
-            : m_eventHandler(handler), m_eventType(T::GetStaticEventHash()) {}
+        EventHandlerWrapper(const EventHandler<T> &handler, String handlerClass)
+            : m_eventHandler(handler), m_eventType(T::GetStaticEventHash()), m_handlerClass(handlerClass) {}
         ~EventHandlerWrapper() = default;
 
     public:
         u32 GetEventHash() const override { return m_eventType; }
+        const String GetClassName() const override { return m_handlerClass; }
 
         void Call(const Event &event) override
         {
@@ -61,6 +63,7 @@ public:                                                                     \
     private:
         EventHandler<T> m_eventHandler;
         const u32 m_eventType;
+        const String m_handlerClass;
     };
 
     class EventManager
@@ -72,6 +75,8 @@ public:                                                                     \
         void Subscribe(EventHandlerInterface *handler);
         void QueueEvent(Event *event);
         void DispatchEvents();
+
+        ArrayList<EventHandlerInterface *> &GetEventInterfaceArray() { return m_interfaces; }
 
     private:
         UnorderedMap<ArrayList<EventHandlerInterface *>, u32> m_eventHashInterfaceTable;

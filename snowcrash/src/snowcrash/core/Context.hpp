@@ -42,11 +42,13 @@ namespace SC
 			return nullptr;
 		}
 
-		template <typename T>
-		inline void SubscribeEvent(const EventHandler<T> &callback)
+		// T is the event that you are subscribing to
+		// O is the class that is registering to that class
+		template <typename T, typename O>
+		inline void SubscribeEvent(const EventHandler<T> &callback, O *object)
 		{
 			SC_TRACE("subscribe event");
-			EventHandlerWrapper<T> *wrapper = new EventHandlerWrapper<T>(callback);
+			EventHandlerWrapper<T> *wrapper = new EventHandlerWrapper<T>(callback, object->GetName());
 			EventHandlerInterface *interface = (EventHandlerInterface *)wrapper;
 			eventManager.Subscribe(interface);
 		}

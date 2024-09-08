@@ -34,8 +34,11 @@ namespace SC
             return dynamic_cast<R *>(m_hashToResource.Get(path));
         }
 
+        const ArrayList<String> &GetLoadedResourcePaths() const { return m_loadedResourcesStrings; }
+
     private:
         HashMap<Resource *, String> m_hashToResource;
+        ArrayList<String> m_loadedResourcesStrings;
 
         // stores resources that we would like to load
         ArrayList<Pair<ResourceLoader *, String>> m_resourceLoadQueue;

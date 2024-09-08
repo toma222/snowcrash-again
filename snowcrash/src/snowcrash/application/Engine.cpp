@@ -14,7 +14,8 @@ namespace SC
             [&](const EventApplicationExit &event)
             {
                 m_running = false;
-            });
+            },
+            this);
 
         m_context->SubscribeEvent<EventApplicationError>(
             [&](const EventApplicationError &event)
@@ -22,7 +23,8 @@ namespace SC
                 SC_ERROR("SC::Engine received error event. exiting program\n error message -> %s", event.errorMessage.c_str());
 
                 m_running = false;
-            });
+            },
+            this);
     }
 
     Engine::~Engine() = default;
