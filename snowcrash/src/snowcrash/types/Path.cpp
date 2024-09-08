@@ -27,6 +27,8 @@ namespace SC
         }
 
         m_relative = (str.c_str()[0] == '/');
+
+        
     }
 
     Path::~Path() = default;
