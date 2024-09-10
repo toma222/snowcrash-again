@@ -11,6 +11,7 @@ project "Testing"
         "%{wks.location}/snowcrash/src",
         "%{wks.location}/external/tinyobjloader",
 		"%{wks.location}/external/glfw/include",
+        "%{wks.location}/external/entt",
         "src"
     }
 

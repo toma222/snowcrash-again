@@ -11,13 +11,10 @@
 #include <snowcrash/graphics/vulkan/PhysicalDevice.hpp>
 #include <snowcrash/graphics/vulkan/LogicalDevice.hpp>
 #include <snowcrash/graphics/vulkan/Swapchain.hpp>
-
 #include <snowcrash/graphics/vulkan/pipeline/RenderPipeline.hpp>
 #include <snowcrash/graphics/vulkan/image/TextureImage2D.hpp>
-
 #include <snowcrash/graphics/vulkan/sync/Fence.hpp>
 #include <snowcrash/graphics/vulkan/sync/Semaphore.hpp>
-
 #include <snowcrash/graphics/vulkan/buffer/IndexBuffer.hpp>
 #include <snowcrash/graphics/vulkan/buffer/VertexBuffer.hpp>
 
@@ -99,6 +96,8 @@ namespace SC
 		vulkan::Fence *m_fence;
 		vulkan::Semaphore *m_imageAvailableSemaphore;
 		vulkan::Semaphore *m_renderFinishedSemaphore;
+
+		vulkan::Framebuffer *m_renderTarget;
 
 		Window *m_window;
 

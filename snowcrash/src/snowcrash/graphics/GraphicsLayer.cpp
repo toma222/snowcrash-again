@@ -193,6 +193,7 @@ namespace SC
 
 		// DRAW SHIT HERE
 
+		/*
 		m_pipeline->BeginRenderPass(buffer, m_renderPass, m_renderPass->GetFramebuffer(imageIndex)->GetHandle(), m_swapchain->GetSwapchainExtent());
 		m_vertexBuffer->Bind(buffer);
 		m_indexBuffer->Bind(buffer);
@@ -209,6 +210,7 @@ namespace SC
 		m_pipeline->BindPushConstant<PushConstant>(buffer, VK_SHADER_STAGE_VERTEX_BIT, &c);
 
 		m_pipeline->DrawIndexed(buffer, m_indexBuffer->GetIndiciesCount());
+		*/
 
 		for (int i = 0; i < m_subrenders.GetIndex(); i++)
 		{

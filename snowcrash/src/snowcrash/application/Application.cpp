@@ -63,13 +63,13 @@ namespace SC
 			// respond to the inputs
 			m_context->DispatchEvents();
 
+			// update the game world
+
 			// update layers
 			for (int i = 0; i < m_context->layerStack.GetIndex(); i++)
 			{
 				m_context->layerStack[i]->Update();
 			}
-
-			// update the game world
 
 			// draw outputs
 			m_window->SwapBuffers();

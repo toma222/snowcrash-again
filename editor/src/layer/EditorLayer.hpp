@@ -3,6 +3,9 @@
 
 #include <snowcrash/application/Layer.hpp>
 #include <snowcrash/graphics/subrenderer/ImGuiSubrender.hpp>
+#include <snowcrash/scene/Scene.hpp>
+#include <snowcrash/scene/Entity.hpp>
+#include <snowcrash/scene/Component.hpp>
 
 namespace editor
 {
