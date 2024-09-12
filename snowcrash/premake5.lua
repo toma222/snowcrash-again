@@ -18,7 +18,7 @@ project "snowcrash"
         "%{wks.location}/external/tinyobjloader",
 		"%{wks.location}/external/glfw/include",
         "%{wks.location}/external/glm",
-        "%{wks.location}/external/entt",
+        "%{wks.location}/external/entt/src",
         "%{wks.location}/external/VulkanMemoryAllocator/include",
         "%{IncludeDir.VulkanSDK}",
         "%{wks.location}/external/imgui",

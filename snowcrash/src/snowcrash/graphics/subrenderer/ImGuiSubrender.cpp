@@ -128,7 +128,7 @@ namespace SC
         ImGui_ImplVulkan_RenderDrawData(main_draw_data, buffer);
     }
 
-    void ImGuiSubrender::RecreateSwapchain()
+    void ImGuiSubrender::RecreateSwapchain(VkExtent2D size)
     {
     }
 

@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <snowcrash/scene/Scene.hpp>
+#include <snowcrash/scene/World.hpp>
 #include <snowcrash/graphics/subrenderer/Subrender.hpp>
 
 #include <snowcrash/graphics/vulkan/Instance.hpp>
@@ -18,12 +18,6 @@
 
 namespace SC
 {
-    struct UniformBufferData
-    {
-        glm::mat4 model;
-        glm::mat4 view;
-        glm::mat4 projection;
-    };
 
     struct PushBuffers
     {
@@ -37,9 +31,9 @@ namespace SC
         GraphicsSystemPipeline(GraphicsLayer *graphicsLayer);
         ~GraphicsSystemPipeline();
 
-        void Init();
-        void Render(VkCommandBuffer VkBuffer);
-        void RecreateSwapchain();
+        void Init() override;
+        void Render(VkCommandBuffer VkBuffer) override;
+        void RecreateSwapchain(VkExtent2D size) override;
 
         // its not constant lmao
         void SetWorld(const World *world) { m_world = world; }
@@ -52,6 +46,8 @@ namespace SC
         vulkan::TextureSampler *m_textureSampler;
         vulkan::TextureImage2D *m_textureImage;
         vulkan::DescriptorLayout *m_layout;
+        vulkan::DescriptorSet *m_descriptorSet;
+        vulkan::VertexDescription *m_vertexDescription;
         vulkan::IndexBuffer *m_indexBuffer;
         vulkan::VertexBuffer *m_vertexBuffer;
         ArrayList<vulkan::ShaderModule *> m_shaderModules;
@@ -66,7 +62,7 @@ namespace SC
         ~GraphicsSystem();
 
         void Init() override;
-        void Update(World *world, Timestamp deltaTime)  override;
+        void Update(World *world, Timestamp deltaTime) override;
 
     private:
         GraphicsSystemPipeline *m_graphicsSystemPipeline;

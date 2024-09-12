@@ -15,6 +15,8 @@ namespace editor
 
         void Render(VkCommandBuffer VkBuffer) override;
 
+        void SetWorldPanels(SC::World *world);
+
         template <class P, typename... Args>
         void AddPanel(Args &&...args)
         {

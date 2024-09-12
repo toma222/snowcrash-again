@@ -239,6 +239,8 @@ namespace SC
 
         void RenderPipeline::BeginRenderPass(VkCommandBuffer buffer, RenderPass *renderPass, VkFramebuffer framebuffer, VkExtent2D extent)
         {
+            SC_ERROR("RenderPipeline::BeginRenderPass is not used anymore");
+            /*
             VkRenderPassBeginInfo renderPassInfo{};
             renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
             renderPassInfo.renderPass = renderPass->GetHandle();
@@ -255,6 +257,7 @@ namespace SC
             renderPassInfo.pClearValues = clearValues.GetArray();
 
             vkCmdBeginRenderPass(buffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+            */
         }
 
         void RenderPipeline::BindPipeline(VkCommandBuffer buffer)

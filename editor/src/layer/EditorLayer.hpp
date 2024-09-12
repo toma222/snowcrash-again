@@ -3,12 +3,14 @@
 
 #include <snowcrash/application/Layer.hpp>
 #include <snowcrash/graphics/subrenderer/ImGuiSubrender.hpp>
-#include <snowcrash/scene/Scene.hpp>
+#include <snowcrash/scene/World.hpp>
 #include <snowcrash/scene/Entity.hpp>
 #include <snowcrash/scene/Component.hpp>
 
 namespace editor
 {
+    class EditorPass;
+
     class EditorLayer : public SC::Layer
     {
         SC_OBJECT(EditorLayer, Layer)
@@ -22,5 +24,8 @@ namespace editor
 
     private:
         SC::ImGuiSubrender *m_subrender;
+        EditorPass *m_editorImGuiPass;
+
+        SC::World *m_world;
     };
 } // namespace editor

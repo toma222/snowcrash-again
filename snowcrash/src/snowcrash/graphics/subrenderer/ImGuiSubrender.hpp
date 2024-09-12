@@ -16,7 +16,7 @@ namespace SC
 
         void Init() override;
         void Render(VkCommandBuffer buffer) override;
-        void RecreateSwapchain() override;
+        void RecreateSwapchain(VkExtent2D size) override;
 
     private:
         void CreateImGuiRenderPass();

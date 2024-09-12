@@ -1,5 +1,5 @@
 
-#include "Scene.hpp"
+#include "World.hpp"
 
 #include <snowcrash/types/UUID.hpp>
 #include <snowcrash/scene/Component.hpp>
@@ -36,6 +36,12 @@ namespace SC
     {
         for (int i = 0; i < m_systems.GetIndex(); i++)
             m_systems[i]->Update(this, deltaTime);
+    }
+
+    void World::InitSystems()
+    {
+        for (int i = 0; i < m_systems.GetIndex(); i++)
+            m_systems[i]->Init();
     }
 
     System::System(Context *context)

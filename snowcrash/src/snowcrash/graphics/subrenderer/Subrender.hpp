@@ -34,7 +34,7 @@ namespace SC
 
         virtual void Init() = 0;
         virtual void Render(VkCommandBuffer buffer) = 0;
-        virtual void RecreateSwapchain() = 0;
+        virtual void RecreateSwapchain(VkExtent2D size) = 0;
 
     public:
         template <class S>

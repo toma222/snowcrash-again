@@ -12,7 +12,7 @@ project "Editor"
         "%{wks.location}/external/VulkanMemoryAllocator/include",
         "src",
         "%{IncludeDir.VulkanSDK}",
-        "%{wks.location}/external/entt",
+        "%{wks.location}/external/entt/src",
         "%{wks.location}/external/imgui",
         "%{wks.location}/external/imgui/backends"
     }

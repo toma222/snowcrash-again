@@ -9,9 +9,12 @@
 #include <entt/entity/registry.hpp>
 
 #include <snowcrash/scene/Entity.hpp>
+#include <snowcrash/types/UUID.hpp>
 
 namespace SC
 {
+    class System;
+
     class World
     {
     public:
@@ -23,6 +26,7 @@ namespace SC
 
         // delta time is in microseconds
         void UpdateSystems(Timestamp deltaTime);
+        void InitSystems();
 
         template <class S>
         void AddSystem(S *system)

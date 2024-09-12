@@ -30,6 +30,9 @@ namespace SC
             // ! this creates the render pass resources with it
             Framebuffer *GetFramebuffer(int i) const { return m_framebuffers[i]; }
 
+            void BeginRenderPass(int frameBufferIndex, VkExtent2D extent, VkCommandBuffer buffer);
+            void EndRenderPass(VkCommandBuffer buffer);
+
         private:
             inline void CreateRenderPassResources(PhysicalDevice *physicalDevice, LogicalDevice *device, Swapchain *swapchain, CommandPool *commandPool);
 

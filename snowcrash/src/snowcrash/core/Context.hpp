@@ -29,13 +29,13 @@ namespace SC
 		}
 
 		template <typename T>
-		const T *GetLayer()
+		T *GetLayer()
 		{
 			for (int i = 0; i < layerStack.GetIndex(); i++)
 			{
 				if (layerStack[i]->GetHash() == T::GetStaticTypeInfo()->hash)
 				{
-					return layerStack[i];
+					return dynamic_cast<T *>(layerStack[i]);
 				}
 			}
 
