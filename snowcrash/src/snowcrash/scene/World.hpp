@@ -34,6 +34,8 @@ namespace SC
             m_systems.Add(dynamic_cast<System *>(system));
         }
 
+        entt::registry *GetRegistry() { return m_registry; }
+
     private:
         ArrayList<System *> m_systems;
         entt::registry *m_registry;

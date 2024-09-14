@@ -17,7 +17,9 @@ namespace SC
         Entity(entt::registry *registry, entt::entity entity)
             : m_registry(registry), m_handle(entity) {}
 
-        template <class C>
+        // ! wacky error here, but the component struct has to hold data
+        // ! or else this function will return void :3
+        template <typename C>
         C &GetComponent()
         {
             return m_registry->get<C>(m_handle);
@@ -29,9 +31,15 @@ namespace SC
             return m_registry->emplace<C>(m_handle, std::forward<Args>(args)...);
         }
 
+        template <typename C>
+        bool HasComponent()
+        {
+            return m_registry->any_of<C>(m_handle);
+        }
+
         operator bool() { return !(m_handle == entt::null); }
 
-    private:
+    public:
         entt::registry *m_registry{nullptr};
         entt::entity m_handle{entt::null};
     };

@@ -13,6 +13,8 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 
 namespace SC
 {
+    void FillImGuiStyle();
+
     void ImGuiVulkanDebugCallback(VkResult result)
     {
         // TODO get this working lol
@@ -77,12 +79,13 @@ namespace SC
         // io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
         // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
+        FillImGuiStyle();
+
         // Path p = m_graphicsLayer->m_context->currentProject.projectPath += "systems/Graphics/fonts/Firacode-Light.ttf";
         Path p = m_graphicsLayer->m_context->currentProject.projectPath += "systems/Graphics/fonts/PixelifySans-VariableFont_wght.ttf";
         io.Fonts->AddFontFromFileTTF(p.GetString().c_str(), 16);
 
         // Setup Dear ImGui style
-        ImGui::StyleColorsDark();
         // ImGui::StyleColorsClassic();
 
         // Setup Platform/Renderer bindings
@@ -119,6 +122,11 @@ namespace SC
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
+        // Dock space is enabled by default :3
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0));
+        ImGui::DockSpaceOverViewport();
+        ImGui::PopStyleColor();
+
         ImGui::ShowDemoWindow();
 
         RenderPasses(buffer);
@@ -137,5 +145,101 @@ namespace SC
         ImGui_ImplVulkan_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
+    }
+
+    ImVec4 ImGuiIntRGBToFloatRGB(int r, int g, int b)
+    {
+        return ImVec4(r / 256.0f, g / 256.0f, b / 256.0f, 1.0f);
+    }
+
+    void FillImGuiStyle()
+    {
+        ImGuiStyle *style = &ImGui::GetStyle();
+        style->WindowMinSize = ImVec2(160, 20);
+        style->FramePadding = ImVec2(4, 4);
+        style->ItemSpacing = ImVec2(6, 4);
+        style->PopupRounding = 6.0f;
+        style->ItemInnerSpacing = ImVec2(6, 4);
+        style->Alpha = 0.95f;
+        style->WindowRounding = 4.0f;
+        style->FrameRounding = 6.0f;
+        style->IndentSpacing = 6.0f;
+        style->ColumnsMinSpacing = 50.0f;
+        style->GrabMinSize = 14.0f;
+        style->GrabRounding = 16.0f;
+        style->ScrollbarSize = 12.0f;
+        style->ScrollbarRounding = 16.0f;
+        style->DockingSeparatorSize = 6.0f;
+
+        ImVec4 darkWindowBackground = ImGuiIntRGBToFloatRGB(29, 32, 33);
+        ImVec4 windowBackground = ImGuiIntRGBToFloatRGB(40, 40, 40);
+        ImVec4 textColor = ImGuiIntRGBToFloatRGB(235, 219, 178);
+        ImVec4 textDisabled = ImGuiIntRGBToFloatRGB(235, 219, 178);
+
+        // backgrounds for the things that are not windows
+        // buttons and tabs and such
+        ImVec4 background1 = ImGuiIntRGBToFloatRGB(60, 56, 54);
+        ImVec4 background2 = ImGuiIntRGBToFloatRGB(80, 73, 69);
+        ImVec4 background3 = ImGuiIntRGBToFloatRGB(102, 92, 84);
+
+        ImVec4 active = ImGuiIntRGBToFloatRGB(152, 151, 26); // green
+        ImVec4 hovered1 = ImGuiIntRGBToFloatRGB(184, 187, 38);
+        ImVec4 hovered2 = ImGuiIntRGBToFloatRGB(184, 187, 38);
+
+        style->Colors[ImGuiCol_Tab] = active;
+        style->Colors[ImGuiCol_TabActive] = windowBackground;
+        style->Colors[ImGuiCol_TabHovered] = hovered2;
+        style->Colors[ImGuiCol_TabDimmedSelected] = active;
+        style->Colors[ImGuiCol_TabDimmedSelectedOverline] = active;
+        style->Colors[ImGuiCol_TabSelectedOverline] = background1;
+
+        style->Colors[ImGuiCol_FrameBg] = background1;
+        style->Colors[ImGuiCol_FrameBgHovered] = hovered2;
+        style->Colors[ImGuiCol_FrameBgActive] = active;
+
+        style->Colors[ImGuiCol_Text] = textColor;
+        style->Colors[ImGuiCol_TextDisabled] = textDisabled;
+        style->Colors[ImGuiCol_WindowBg] = windowBackground;
+        style->Colors[ImGuiCol_Border] = darkWindowBackground;
+        style->Colors[ImGuiCol_BorderShadow] = darkWindowBackground;
+
+        style->Colors[ImGuiCol_TitleBg] = background1;
+        style->Colors[ImGuiCol_TitleBgCollapsed] = background3;
+        style->Colors[ImGuiCol_TitleBgActive] = active;
+
+        style->Colors[ImGuiCol_MenuBarBg] = background3;
+        style->Colors[ImGuiCol_ScrollbarBg] = background1;
+        style->Colors[ImGuiCol_ScrollbarGrab] = darkWindowBackground;
+        style->Colors[ImGuiCol_ScrollbarGrabHovered] = hovered2;
+        style->Colors[ImGuiCol_ScrollbarGrabActive] = active;
+        style->Colors[ImGuiCol_CheckMark] = active;
+
+        style->Colors[ImGuiCol_SliderGrab] = background3;
+        style->Colors[ImGuiCol_SliderGrabActive] = active;
+
+        style->Colors[ImGuiCol_Button] = background1;
+        style->Colors[ImGuiCol_ButtonHovered] = hovered1;
+        style->Colors[ImGuiCol_ButtonActive] = active;
+
+        style->Colors[ImGuiCol_Header] = background1;
+        style->Colors[ImGuiCol_HeaderHovered] = hovered1;
+        style->Colors[ImGuiCol_HeaderActive] = active;
+
+        style->Colors[ImGuiCol_Separator] = darkWindowBackground;
+        style->Colors[ImGuiCol_SeparatorHovered] = darkWindowBackground;
+
+        style->Colors[ImGuiCol_SeparatorActive] = active;
+        style->Colors[ImGuiCol_ResizeGrip] = background1;
+        style->Colors[ImGuiCol_ResizeGripHovered] = hovered2;
+        style->Colors[ImGuiCol_ResizeGripActive] = active;
+        style->Colors[ImGuiCol_PlotLines] = active;
+        style->Colors[ImGuiCol_PlotLinesHovered] = active;
+        style->Colors[ImGuiCol_PlotHistogram] = active;
+        style->Colors[ImGuiCol_PlotHistogramHovered] = active;
+        style->Colors[ImGuiCol_TextSelectedBg] = textColor;
+        style->Colors[ImGuiCol_PopupBg] = background2;
+
+        style->Colors[ImGuiCol_DockingPreview] = active;
+        style->Colors[ImGuiCol_DockingEmptyBg] = ImVec4(0, 0, 0, 0);
     }
 } // namespace SXC

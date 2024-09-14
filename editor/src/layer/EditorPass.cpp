@@ -26,6 +26,8 @@ namespace editor
 
     void EditorPass::Render(VkCommandBuffer VkBuffer)
     {
+        // ImGuiDockNodeFlags flags = ImGuiDockNodeFlags_;
+
         for (int i = 0; i < m_panels.GetIndex(); i++)
         {
             m_panels[i]->Update();

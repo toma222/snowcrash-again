@@ -15,7 +15,7 @@ namespace editor
 
         void SetWorld(SC::World *_world) { world = _world; }
 
-    private:
+    protected:
         SC::World *world{nullptr};
     };
 } // namespace editor

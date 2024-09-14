@@ -1,6 +1,7 @@
 {
   "files.associations": {
-    "random": "cpp"
+    "random": "cpp",
+    "tuple": "cpp"
   },
   "cmake.ignoreCMakeListsMissing": true,
   "cmake.configureOnOpen": true,

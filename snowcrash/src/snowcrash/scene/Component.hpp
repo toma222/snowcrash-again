@@ -36,4 +36,20 @@ namespace SC
         glm::vec3 scale{1.0, 1.0, 1.0};
     };
 
+    struct ComponentMeshRenderer
+    {
+        ComponentMeshRenderer(int _i)
+            : i(_i) {}
+        ComponentMeshRenderer(const ComponentMeshRenderer &) = default;
+        ~ComponentMeshRenderer() = default;
+
+        glm::vec4 m_tintColor;
+        int i;
+    };
+
+    template <typename... Component>
+    struct ComponentGroup
+    {
+    };
+
 } // namespace SC
